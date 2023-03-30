@@ -1,0 +1,2364 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.0'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     75850,       2109]*)
+(*NotebookOutlinePosition[     76495,       2131]*)
+(*  CellTagsIndexPosition[     76451,       2127]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[TextData[StyleBox["1", "Text"]], "Text",
+  FormatType->TextForm],
+
+Cell["1.1", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[GetRandomBF];\)\), "\n", 
+    \(\(GetRandomBF[n_] := 
+        Table[Random[Integer, {0, 1}], {2^n}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(f\  = \ GetRandomBF[5]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 
+      1, 1, 1, 1, 0, 1, 1, 1, 0}\)], "Output"]
+}, Open  ]],
+
+Cell["1.2", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[GetRandomBFweight];\)\), "\[IndentingNewLine]", 
+    \(\(GetRandomBFweight[n_, 
+          w_] := \[IndentingNewLine]Module[{tmp, 
+            counter}, \[IndentingNewLine]tmp = 
+            Table[0, {2^n}]; \[IndentingNewLine]counter = 
+            0; \[IndentingNewLine]While[
+            counter < w, \[IndentingNewLine]ind = 
+              Random[Integer, {1, 
+                  2^n}]; \[IndentingNewLine]If[\[IndentingNewLine]tmp[\([ind]\
+\)] \[Equal] 0, \[IndentingNewLine]tmp[\([ind]\)] = 
+                1; \[IndentingNewLine]\(counter++\);, 
+              Continue[]];\[IndentingNewLine]]; \[IndentingNewLine]tmp\
+\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomBFweight[5, \ 17];\)\ \), "\[IndentingNewLine]", 
+    \(Count[f, \ 1]\)}], "Input"],
+
+Cell[BoxData[
+    \(17\)], "Output"]
+}, Open  ]],
+
+Cell["1.3", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[GetRandomLinearBF];\)\), "\n", 
+    \(\(GetRandomLinearBF[
+          n_] := \[IndentingNewLine]Module[{ft, tmp, \ 
+            i}, \[IndentingNewLine]f = 
+            Table[Random[Integer, {0, 1}], {n}]; \[IndentingNewLine]tmp = 
+            Table[0, {2^n}]; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]\(If[
+                EvenQ[IntegerDigits[i, 2, n] . 
+                    f], \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    0;\), \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    1;\)\[IndentingNewLine]];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]tmp\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
+\[IndentingNewLine]", 
+    \(\(ClearAll[GetRandomAffineBF];\)\), "\n", 
+    \(\(GetRandomAffineBF[
+          n_] := \[IndentingNewLine]Module[{ft, tmp, \ 
+            i}, \[IndentingNewLine]f = 
+            Table[Random[Integer, {0, 1}], {n}]; \[IndentingNewLine]tmp = 
+            Table[0, {2^n}]; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]\(If[
+                OddQ[IntegerDigits[i, 2, n] . 
+                    f], \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    0;\), \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    1;\)\[IndentingNewLine]];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]tmp\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
+\[IndentingNewLine]", 
+    \(\(ClearAll[GetLinearBF];\)\), "\n", 
+    \(\(GetLinearBF[f_, \ 
+          n_] := \[IndentingNewLine]Module[{ft, tmp, \ 
+            i}, \[IndentingNewLine]tmp = 
+            Table[0, {2^n}]; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]\(If[
+                EvenQ[IntegerDigits[i, 2, n] . 
+                    f], \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    0;\), \[IndentingNewLine]\(tmp[\([i + 1]\)] = 
+                    1;\)\[IndentingNewLine]];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]tmp\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(f\  = \ GetRandomLinearBF[5]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 
+      1, 0, 1, 1, 0, 1, 0, 0, 1}\)], "Output"]
+}, Open  ]],
+
+Cell["\<\
+2
+2.1 ?\
+\>", "Text"],
+
+Cell["2.2/3", "Text"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\(ClearAll[TransFormVec];\)\n
+    \(TransFormVec[{0}, 0] = {0};\)\n
+    \(TransFormVec[{1}, 0] = {1};\)\n
+    \(TransFormVec[vec_, 
+          n_] := \(TransFormVec[vec, 
+            n] = \[IndentingNewLine]Module[{tmp1, tmp2, 
+              x}, \[IndentingNewLine]If[
+              Length[vec] \[NotEqual] 2^n, \[IndentingNewLine]Return[0, 
+                Module]\[IndentingNewLine]]; \[IndentingNewLine]tmp1 = 
+              TransFormVec[Take[vec, 2^\((n - 1)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              TransFormVec[Take[vec, \(-2^\((n - 1)\)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              BitXor[tmp1, tmp2]; \[IndentingNewLine]Join[tmp1, 
+              tmp2]\[IndentingNewLine]]\);\)\[IndentingNewLine]
+    TransFormVec[{1, \ 1, \ 1, \ 0}, \ 2]\)\(\ \)\)\)], "Input"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[Zheg];\)\), "\n", 
+    \(\(\(Zheg[vec_, 
+          n_] := \[IndentingNewLine]Module[{f, tmp, tmp11, mon, \ 
+            i}, \[IndentingNewLine]tmp = 
+            Table[StringForm["\<x``\>", a], {a, 1, 
+                n}]; \[IndentingNewLine]f = 0; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]If[
+              vec[\([i + 1]\)] \[Equal] 
+                0, \[IndentingNewLine]\(Continue[];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]mon = 1; \[IndentingNewLine]tmp11 = 
+              IntegerDigits[i, 2, n]; \[IndentingNewLine]For[j = 0, 
+              j < n, \(j++\), \[IndentingNewLine]\(If[
+                  tmp11[\([j + 1]\)] \[Equal] 
+                    1, \[IndentingNewLine]\(mon *= 
+                      tmp[\([j + 
+                            1]\)];\)\[IndentingNewLine]];\)\[IndentingNewLine]\
+]; \[IndentingNewLine]f += 
+              vec[\([i + 1]\)]*
+                mon;\[IndentingNewLine]]; \[IndentingNewLine]f\
+\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(TruthToANF[vec_, n_] := TransFormVec[vec, n];\)\), "\n", 
+    \(\(TruthToZheg[vec_, \ n_]\  := \ 
+        Zheg[TransFormVec[vec, \ n], \ n];\)\), "\[IndentingNewLine]", 
+    \(\(AnfToTruth[vec_, n_] := TransFormVec[vec, n];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomBF[5];\)\), "\[IndentingNewLine]", 
+    \(f\  \[Equal] \ AnfToTruth[TruthToANF[f, \ 5], \ 5]\)}], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomLinearBF[5];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 5]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomBF[5];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 5]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}]}]], "Output"]
+}, Open  ]],
+
+Cell["2.4", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[TransFormPoly];\)\), "\n", 
+    \(\(TransFormPoly[vec_, 1] := {{1, 0}, {\(-1\), 1}} . vec;\)\), "\n", 
+    \(\(\(TransFormPoly[vec_, 
+          n_] := \(TransFormPoly[vec, 
+            n] = \[IndentingNewLine]Module[{tmp1, tmp2, 
+              x}, \[IndentingNewLine]If[
+              Length[vec] \[NotEqual] 2^n, \[IndentingNewLine]Return[0, 
+                Module]\[IndentingNewLine]]; \[IndentingNewLine]tmp1 = 
+              TransFormPoly[Take[vec, 2^\((n - 1)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              TransFormPoly[Take[vec, \(-2^\((n - 1)\)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              tmp2 - tmp1; \[IndentingNewLine]Join[tmp1, 
+              tmp2]\[IndentingNewLine]]\);\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
+    \(RealPoly[f_, n_] := Zheg[TransFormPoly[f, n], n]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomLinearBF[5];\)\), "\[IndentingNewLine]", 
+    \(RealPoly[f, \ 5]\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 5]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+        StringForm[ "x``", 4],
+        Editable->False], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{"4", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{"4", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{"4", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{"4", " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"8", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+        StringForm[ "x``", 4],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomBF[4];\)\), "\[IndentingNewLine]", 
+    \(RealPoly[f, \ 4]\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 4]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{"3", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}]}]], "Output"]
+}, Open  ]],
+
+Cell["2.5", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[TransFormHad];\)\), "\n", 
+    \(\(TransFormHad[vec_, 1] = {{1, 1}, {1, \(-1\)}} . vec;\)\), "\n", 
+    \(\(\(TransFormHad[vec_, 
+          n_] := \(TransFormHad[vec, 
+            n] = \[IndentingNewLine]Module[{tmp1, tmp2, tmp3, tmp4, 
+              x}, \[IndentingNewLine]If[
+              Length[vec] \[NotEqual] 2^n, \[IndentingNewLine]Return[0, 
+                Module]\[IndentingNewLine]]; \[IndentingNewLine]tmp1 = 
+              TransFormHad[Take[vec, 2^\((n - 1)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              TransFormHad[Take[vec, \(-2^\((n - 1)\)\)], 
+                n - 1]; \[IndentingNewLine]tmp3 = 
+              tmp1 + tmp2; \[IndentingNewLine]tmp4 = 
+              tmp1 - tmp2; \[IndentingNewLine]Join[tmp3, 
+              tmp4]\[IndentingNewLine]]\);\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
+    \(\(ClearAll[HadamardCoefficients];\)\), "\[IndentingNewLine]", 
+    \(\(\(HadamardCoefficients[vec_, 
+          n_] := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp = 
+            1 - 2  vec; \[IndentingNewLine]TransFormHad[tmp, 
+            n]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
+    \(\(ClearAll[FourierCoefficients];\)\), "\[IndentingNewLine]", 
+    \(\(FourierCoefficients[vec_, n_] := 
+        Module[{tmp}, 
+          tmp = 1 - 2\ vec; \[IndentingNewLine]tmp = 
+            TransFormHad[tmp, n]; \[IndentingNewLine]tmp = 
+            tmp/\((\(-2\))\); \[IndentingNewLine]tmp[\([1]\)] = 
+            Count[vec, 
+              1]; \[IndentingNewLine]tmp\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(f = {0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1};\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(g = TransFormVec[f, 4];\)\), "\n", 
+    \(Zheg[g, 4]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(HadamardCoefficients[f, 4]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, \(-8\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FourierCoefficients[f, 4]\)], "Input"],
+
+Cell[BoxData[
+    \({8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, \(-4\), \(-4\), \(-4\), 
+      4}\)], "Output"]
+}, Open  ]],
+
+Cell["2.6", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[SpectrToTruth];\)\), "\[IndentingNewLine]", 
+    \(\(SpectrToTruth[vec_, 
+          n_] := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp = \
+\(-2\)\ vec; \[IndentingNewLine]tmp[\([1]\)] = 
+            2^n + tmp[\([1]\)]; \[IndentingNewLine]tmp = 
+            TransFormHad[tmp, n]/2^n; \[IndentingNewLine]\((1 - tmp)\)/
+            2\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SpectrToTruth[FourierCoefficients[f, 4], 4] \[Equal] f\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell["2.7 -", "Text"],
+
+Cell["3", "Text"],
+
+Cell["3.1", "Text"],
+
+Cell["3.1.1", "Text"],
+
+Cell[BoxData[{
+    \(\(ClearAll[VectorFunctionR];\)\), "\[IndentingNewLine]", 
+    \(\(VectorFunctionR[fs_, n_, m_] := \ 
+        Function[u, \ 
+          Table[fs[\([i, \ FromDigits[u, \ 2]\  + \ 1]\)], \ {i, \ 
+              m}]];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(f\  = \ {\[IndentingNewLine]{0, \ 1, \ 1, \ 
+            0}, \ \[IndentingNewLine]{1, \ 1, 1\ , \ 
+            0}\[IndentingNewLine]};\)\), "\[IndentingNewLine]", 
+    \(\(F\  = \ VectorFunctionR[f, \ 2, \ 2];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(F[{0, \ 0}]\), "\[IndentingNewLine]", 
+    \(F[{0, \ 1}]\), "\[IndentingNewLine]", 
+    \(F[{1, \ 0}]\), "\[IndentingNewLine]", 
+    \(F[{1, \ 1}]\)}], "Input"],
+
+Cell[BoxData[
+    \({0, 1}\)], "Output"],
+
+Cell[BoxData[
+    \({1, 1}\)], "Output"],
+
+Cell[BoxData[
+    \({1, 1}\)], "Output"],
+
+Cell[BoxData[
+    \({0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell["3.1.2", "Text"],
+
+Cell[BoxData[
+    \(\(VectorFunctionRandom[n_, m_] := 
+        VectorFunctionR[Table[GetRandomBF[n], \ {m}], \ n, m];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(F1\  = \ VectorFunctionRandom[2, \ 3];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(F1[{0, \ 1}]\)], "Input"],
+
+Cell[BoxData[
+    \({1, 0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell["3.2", "Text"],
+
+Cell["3.2.1", "Text"],
+
+Cell[BoxData[
+    \(\(BaseFunctions[vf_, n_, 
+          m_] := \[IndentingNewLine]Module[{tmp, res, \ i, \ 
+            j}, \[IndentingNewLine]res = 
+            Table[Table[0, {2^n}], {m}]; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]tmp\  = \ 
+              IntegerDigits[vf[\([i\  + \ 1]\)], \ 2, \ 
+                m]; \[IndentingNewLine]For[j\  = \ 0, \ 
+              j\  < \ m, \ \(j++\), \[IndentingNewLine]\(res[\([j + 1, \ 
+                      i + 1]\)]\  = \ 
+                  tmp[\([j + 
+                        1]\)];\)\[IndentingNewLine]];\[IndentingNewLine]]; \
+\[IndentingNewLine]res\[IndentingNewLine]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(F\  = \ {1, \ 2, \ 3, \ 4};\)\), "\[IndentingNewLine]", 
+    \(BaseFunctions[F, \ 2, \ 3]\)}], "Input"],
+
+Cell[BoxData[
+    \({{0, 0, 0, 1}, {0, 1, 1, 0}, {1, 0, 1, 0}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(3.2  .2\)], "Input"],
+
+Cell[BoxData[{
+    \(\(\(Weight[f_] := Count[f, 1];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(\(MonomsCountZheg[f_, 
+          n_] := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp = 
+            TransFormVec[f, n]; \[IndentingNewLine]Count[tmp, 
+            1]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(MonomsAll[fs_, n_, 
+          m_] := \[IndentingNewLine]Module[{tmp, i}, \[IndentingNewLine]tmp = 
+            fs[\([1]\)]; \[IndentingNewLine]For[i = 1, 
+            i < m, \(i++\), \[IndentingNewLine]\(tmp\  = \ 
+                BitOr[tmp, \ 
+                  fs[\([i\  + \ 
+                        1]\)]];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]Count[tmp, \ 1]\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(bf\  = \ BaseFunctions[F, \ 2, \ 3]\)], "Input"],
+
+Cell[BoxData[
+    \({{0, 0, 0, 1}, {0, 1, 1, 0}, {1, 0, 1, 0}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Table[Weight[bf[\([i]\)]], \ {i, \ 3}]\)], "Input"],
+
+Cell[BoxData[
+    \({1, 2, 2}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Table[
+      TruthToZheg[bf[\([i]\)], \ 2], \ {i, \ 3}]\), "\[IndentingNewLine]", 
+    \(Table[MonomsCountZheg[bf[\([i]\)], \ 2], \ {i, \ 3}]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+            StringForm[ "x``", 1],
+            Editable->False], " ", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}], ",", 
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+            StringForm[ "x``", 1],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}], ",", 
+        RowBox[{"1", "+", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}]}], "}"}]], "Output"],
+
+Cell[BoxData[
+    \({1, 2, 2}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Table[
+      TruthToZheg[bf[\([i]\)], \ 2], \ {i, \ 3}]\), "\[IndentingNewLine]", 
+    \(MonomsAll[bf, 2, \ 3]\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+            StringForm[ "x``", 1],
+            Editable->False], " ", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}], ",", 
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+            StringForm[ "x``", 1],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}], ",", 
+        RowBox[{"1", "+", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False]}]}], "}"}]], "Output"],
+
+Cell[BoxData[
+    \(4\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[{
+    \(\(ClearAll[LinAnalog];\)\), "\[IndentingNewLine]", 
+    \(\(LinAnalog[f_, 
+          n_] := \[IndentingNewLine]Module[{had, probs, m, res, \ i, \ 
+            fin}, \[IndentingNewLine]had = 
+            HadamardCoefficients[f, n]; \[IndentingNewLine]probs\  = \ 
+            1/2\  + \ had/2^\((n\  + \ 1)\); \[IndentingNewLine]m = 
+            0; \[IndentingNewLine]res = {}; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]\(If[
+                probs[\([i + 1]\)] > m, \[IndentingNewLine]m = 
+                  probs[\([i + 
+                        1]\)]; \[IndentingNewLine]res = {i};, \
+\[IndentingNewLine]\(If[
+                    probs[\([i\  + \ 1]\)]\  \[Equal] \ 
+                      m, \[IndentingNewLine]\(res = \ 
+                        Append[res, \ 
+                          i];\)\[IndentingNewLine]];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]fin\  = \ 
+            Table[IntegerDigits[res[\([i]\)], 2, n], {i, \ 
+                Length[res]}]; \[IndentingNewLine]Append[fin, \ 
+            m]\[IndentingNewLine]];\)\n\), "\[IndentingNewLine]", 
+    \(\(ClearAll[AffineAnalog];\)\), "\[IndentingNewLine]", 
+    \(\(AffineAnalog[f_, 
+          n_] := \[IndentingNewLine]Module[{had, probs, m, res, \ i, \ 
+            fin}, \[IndentingNewLine]had = 
+            HadamardCoefficients[f, n]; \[IndentingNewLine]probs\  = \ 
+            1/2\  - \ had/2^\((n\  + \ 1)\); \[IndentingNewLine]m = 
+            0; \[IndentingNewLine]res = {}; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]\(If[
+                probs[\([i + 1]\)] > m, \[IndentingNewLine]m = 
+                  probs[\([i + 
+                        1]\)]; \[IndentingNewLine]res = {i};, \
+\[IndentingNewLine]\(If[
+                    probs[\([i\  + \ 1]\)]\  \[Equal] \ 
+                      m, \[IndentingNewLine]\(res = \ 
+                        Append[res, \ 
+                          i];\)\[IndentingNewLine]];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]fin\  = \ 
+            Table[IntegerDigits[res[\([i]\)], 2, n], {i, \ 
+                Length[res]}]; \[IndentingNewLine]Append[fin, \ 
+            m]\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomLinearBF[6];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 6]\), "\[IndentingNewLine]", 
+    \(g\  = LinAnalog[f, \ 6]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+        StringForm[ "x``", 4],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+        StringForm[ "x``", 6],
+        Editable->False]}]], "Output"],
+
+Cell[BoxData[
+    \({{0, 1, 0, 1, 0, 1}, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomAffineBF[6];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 6]\), "\[IndentingNewLine]", 
+    \(g\  = AffineAnalog[f, \ 6]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False]}]], "Output"],
+
+Cell[BoxData[
+    \({{1, 1, 0, 0, 1, 0}, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(TruthToZheg[GetLinearBF[g[\([1]\)], \ 6], \ 6]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+        StringForm[ "x``", 6],
+        Editable->False]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomBF[6];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 6]\), "\[IndentingNewLine]", 
+    \(g\  = \ LinAnalog[f, \ 6]\), "\[IndentingNewLine]", 
+    \(Table[
+      TruthToZheg[GetLinearBF[g[\([i]\)], \ 6], \ 6], {i, \ 
+        Length[g]\  - 1}]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+        StringForm[ "x``", 5],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+        StringForm[ "x``", 6],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    \({{0, 0, 1, 1, 1, 1}, {1, 1, 1, 1, 0, 1}, 41\/64}\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+            StringForm[ "x``", 3],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+            StringForm[ "x``", 4],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+            StringForm[ "x``", 5],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+            StringForm[ "x``", 6],
+            Editable->False]}], ",", 
+        RowBox[{
+          InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+            StringForm[ "x``", 1],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+            StringForm[ "x``", 2],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+            StringForm[ "x``", 3],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+            StringForm[ "x``", 4],
+            Editable->False], "+", 
+          InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+            StringForm[ "x``", 6],
+            Editable->False]}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[Deg];\)\), "\[IndentingNewLine]", 
+    \(\(\(Deg[f_, \ 
+          n_]\  := \[IndentingNewLine]Module[{i, \ tmp, \ tmm, \ 
+            m}, \ \[IndentingNewLine]tmp\ \  = \ 
+            TransFormPoly[f, \ n]; \[IndentingNewLine]m\  = \ 
+            0; \[IndentingNewLine]For[i\  = \ 0, \ 
+            i\  < \ 2^n, \ \(i++\), \[IndentingNewLine]\(If[
+                tmp[\([i + 1]\)]\  \[NotEqual] \ 
+                  0, \[IndentingNewLine]tmm\  = \ 
+                  Count[IntegerDigits[i, \ 2], \ 1]; \[IndentingNewLine]If[
+                  tmm\  > \ 
+                    m, \[IndentingNewLine]\(m\  = \ 
+                      tmm;\)\[IndentingNewLine]];\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]m\[IndentingNewLine]];\)\(\
+\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[RealMonomCount];\)\), "\[IndentingNewLine]", 
+    \(\(\(RealMonomCount[f_, \ 
+          n_]\  := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp\  \
+= \ TransFormPoly[f, \ n]; \[IndentingNewLine]2^n\  - \ 
+            Count[tmp, \ 0]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[GetPr];\)\), "\n", 
+    \(\(\(GetPr[f_, n_, 
+          p_] := \[IndentingNewLine]Module[{res, tmp, tmp1111, mon, vec, \ 
+            i}, \[IndentingNewLine]vec = 
+            TransFormPoly[f, n]; \[IndentingNewLine]tmp = 
+            Table[p, {a, 1, n}]; \[IndentingNewLine]res = 
+            0; \[IndentingNewLine]For[i = 0, i < 2^n, \(i++\), 
+            If[vec[\([i + 1]\)] \[Equal] 
+                0, \(Continue[];\)]; \[IndentingNewLine]mon = 
+              1; \[IndentingNewLine]tmp1111 = 
+              IntegerDigits[i, 2, n]; \[IndentingNewLine]For[j = 0, 
+              j < n, \(j++\), \[IndentingNewLine]\(If[
+                  tmp1111[\([j + 1]\)] \[Equal] 
+                    1, \[IndentingNewLine]\(mon *= 
+                      tmp[\([j + 
+                            1]\)];\)\[IndentingNewLine]];\)\[IndentingNewLine]\
+]; \[IndentingNewLine]res += 
+              vec[\([i + 1]\)]*
+                mon;\[IndentingNewLine]]; \[IndentingNewLine]res\
+\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
+    \(\(ClearAll[GetDer];\)\), "\n", 
+    \(\(\(GetDer[f_, n_, p_, 
+          k_] := \[IndentingNewLine]Module[{res, tmp, tmp1111, mon, vec, \ 
+            i}, \[IndentingNewLine]vec = 
+            TransFormPoly[f, n]; \[IndentingNewLine]tmp = 
+            Table[p, {a, 1, n}]; \[IndentingNewLine]tmp[\([k + 1]\)] = 
+            1; \[IndentingNewLine]res = 0; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]If[
+              vec[\([i + 1]\)] \[Equal] 
+                0, \[IndentingNewLine]\(Continue[];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]mon = 1; \[IndentingNewLine]tmp1111 = 
+              IntegerDigits[i, 2, n]; \[IndentingNewLine]If[
+              tmp1111[\([k + 1]\)] \[Equal] 1, \[IndentingNewLine]For[j = 0, 
+                j < n, \(j++\), \[IndentingNewLine]\(If[
+                    tmp1111[\([j + 1]\)] \[Equal] 
+                      1, \[IndentingNewLine]\(mon *= 
+                        tmp[\([j + 
+                              1]\)];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]res += 
+                vec[\([i + 1]\)]*
+                  mon;\[IndentingNewLine]];\[IndentingNewLine]]; \
+\[IndentingNewLine]res\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
+    \(\(ClearAll[GetGrad];\)\), "\n", 
+    \(\(GetGrad[f_, n_, 
+          p_] := \[IndentingNewLine]Module[{res, tmp, \ 
+            i}, \[IndentingNewLine]res = 
+            Table[0, {n}]; \[IndentingNewLine]For[i = 0, 
+            i < n, \(i++\), \[IndentingNewLine]\(res[\([i + 1]\)] = 
+                GetDer[f, n, p, 
+                  i];\)\[IndentingNewLine]]; \[IndentingNewLine]res\
+\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(f\  = \ GetRandomBF[5]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+      0, 0, 0, 1, 0, 1, 0, 0, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(TruthToZheg[f, \ 5]\), "\[IndentingNewLine]", 
+    \(RealPoly[f, \ 5]\), "\[IndentingNewLine]", 
+    \(Deg[f, \ 5]\), "\[IndentingNewLine]", 
+    \(RealMonomCount[f, \ 5]\), "\[IndentingNewLine]", 
+    \(GetGrad[f, \ 5, \ 1/2]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+        StringForm[ "x``", 4],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+        StringForm[ "x``", 4],
+        Editable->False], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "-", 
+      RowBox[{"3", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"3", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}], "+", 
+      RowBox[{"6", " ", 
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(4\\)\"\>",
+          StringForm[ "x``", 4],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(5\\)\"\>",
+          StringForm[ "x``", 5],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    \(5\)], "Output"],
+
+Cell[BoxData[
+    \(22\)], "Output"],
+
+Cell[BoxData[
+    \({1\/8, \(-\(1\/8\)\), 1\/4, 1\/8, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f\  = \ GetRandomLinearBF[6];\)\), "\[IndentingNewLine]", 
+    \(TruthToZheg[f, \ 6]\), "\[IndentingNewLine]", 
+    \(RealPoly[f, \ 6]\), "\[IndentingNewLine]", 
+    \(Deg[f, \ 6]\), "\[IndentingNewLine]", 
+    \(RealMonomCount[f, \ 6]\), "\[IndentingNewLine]", 
+    \(GetGrad[f, \ 6, \ 1/2]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+        StringForm[ "x``", 6],
+        Editable->False]}]], "Output"],
+
+Cell[BoxData[
+    RowBox[{
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+        StringForm[ "x``", 6],
+        Editable->False], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "-", 
+      RowBox[{"2", " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}], "+", 
+      RowBox[{"4", " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(6\\)\"\>",
+          StringForm[ "x``", 6],
+          Editable->False]}]}]], "Output"],
+
+Cell[BoxData[
+    \(3\)], "Output"],
+
+Cell[BoxData[
+    \(7\)], "Output"],
+
+Cell[BoxData[
+    \({0, 0, 0, 0, 0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(3.3\)], "Input"],
+
+Cell["1)", "Text"],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(\(ClearAll[ZhegYY];\)\n
+    \(ZhegYY[vec_, 
+          n_] := \[IndentingNewLine]Module[{f, tmp, tmp11, mon, \ i, \ 
+            j}, \[IndentingNewLine]tmp = 
+            Table[StringForm["\<y``\>", a], {a, 1, 
+                n}]; \[IndentingNewLine]f = 0; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]If[
+              vec[\([i + 1]\)] \[Equal] 
+                0, \[IndentingNewLine]\(Continue[];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]mon = 1; \[IndentingNewLine]tmp11 = 
+              IntegerDigits[i, 2, n]; \[IndentingNewLine]For[j = 0, 
+              j < n, \(j++\), \[IndentingNewLine]\(If[
+                  tmp11[\([j + 1]\)] \[Equal] 
+                    1, \[IndentingNewLine]\(mon *= 
+                      tmp[\([j + 
+                            1]\)];\)\[IndentingNewLine]];\)\[IndentingNewLine]\
+]; \[IndentingNewLine]f += 
+              vec[\([i + 1]\)]*
+                mon;\[IndentingNewLine]]; \[IndentingNewLine]f\
+\[IndentingNewLine]];\)\[IndentingNewLine]
+    \(TruthToZhegYY[vec_, \ n_]\  := \ 
+        ZhegYY[TransFormVec[vec, \ n], \ n];\)\[IndentingNewLine]
+    \)\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(ClearAll[VectorToLinear];\)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[VectorToLinearZero];\)\), "\[IndentingNewLine]", 
+    \(\(\(VectorToLinearZero[F_, n_, \ 
+          m_] := \[IndentingNewLine]Module[{fur, probs, mprob, res, \ i, \ 
+            fin, \ tmp}, \[IndentingNewLine]fur = 
+            FourierCoefficients[F, n\  + \ m]; \[IndentingNewLine]probs\  = \ 
+            1/2\  + \ fur/2^\((n\  + \ 1)\); \[IndentingNewLine]mprob = 
+            0; \[IndentingNewLine]res = {}; \[IndentingNewLine]For[i = 1, 
+            i < 2^\((m\  + \ n)\), \(i++\), \[IndentingNewLine]\(If[
+                probs[\([i + 1]\)] > mprob, \[IndentingNewLine]mprob = 
+                  probs[\([i + 
+                        1]\)]; \[IndentingNewLine]res = {i};, \
+\[IndentingNewLine]\(If[
+                    probs[\([i\  + \ 1]\)]\  \[Equal] \ 
+                      mprob, \[IndentingNewLine]\(res = \ 
+                        Append[res, \ 
+                          i];\)\[IndentingNewLine]];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]\[IndentingNewLine]fin\  = \ 
+            Table[\[IndentingNewLine]tmp\  = \ 
+                IntegerDigits[res[\([i]\)], 2, 
+                  n\  + \ m]; \[IndentingNewLine]{Take[tmp, \ n], 
+                Take[tmp, \ \(-m\)]}, \ \[IndentingNewLine]{i, \ 
+                Length[res]}\[IndentingNewLine]]; \[IndentingNewLine]Append[
+            fin, \ mprob]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[VectorToLinearOne];\)\), "\[IndentingNewLine]", 
+    \(\(\(VectorToLinearOne[F_, n_, \ 
+          m_] := \[IndentingNewLine]Module[{fur, probs, mprob, res, \ i, \ 
+            fin, \ tmp}, \[IndentingNewLine]fur = 
+            FourierCoefficients[F, n\  + \ m]; \[IndentingNewLine]probs\  = \ 
+            1/2\  - \ fur/2^\((n\  + \ 1)\); \[IndentingNewLine]mprob = 
+            0; \[IndentingNewLine]res = {}; \[IndentingNewLine]For[i = 0, 
+            i < 2^\((m\  + \ n)\), \(i++\), \[IndentingNewLine]\(If[
+                probs[\([i + 1]\)] > mprob, \[IndentingNewLine]mprob = 
+                  probs[\([i + 
+                        1]\)]; \[IndentingNewLine]res = {i};, \
+\[IndentingNewLine]\(If[
+                    probs[\([i\  + \ 1]\)]\  \[Equal] \ 
+                      mprob, \[IndentingNewLine]\(res = \ 
+                        Append[res, \ 
+                          i];\)\[IndentingNewLine]];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]\[IndentingNewLine]fin\  = \ 
+            Table[\[IndentingNewLine]tmp\  = \ 
+                IntegerDigits[res[\([i]\)], 2, 
+                  n\  + \ m]; \[IndentingNewLine]{Take[tmp, \ n], 
+                Take[tmp, \ \(-m\)]}, \ \[IndentingNewLine]{i, \ 
+                Length[res]}\[IndentingNewLine]]; \[IndentingNewLine]Append[
+            fin, \ mprob]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[Tetta];\)\), "\[IndentingNewLine]", 
+    \(\(Tetta[fs_, n_, 
+          m_] := \[IndentingNewLine]Module[{tmp, res, \ 
+            i}, \[IndentingNewLine]tmp = 
+            Transpose[fs]; \[IndentingNewLine]res = 
+            Table[0, {2^\((m + n)\)}]; \[IndentingNewLine]For[i = 0, 
+            i < 2^n, \(i++\), \[IndentingNewLine]y = 
+              FromDigits[tmp[\([i + 1]\)], 2]; \[IndentingNewLine]y = 
+              i*2^m + y; \[IndentingNewLine]res[\([y + 1]\)] = 
+              1;\[IndentingNewLine]]; \[IndentingNewLine]res\
+\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(F1\  = \ {1, \ 2, \ 3, \ 4};\)\), "\[IndentingNewLine]", 
+    \(bf\  = \ BaseFunctions[F1, \ 2, \ 3]\)}], "Input"],
+
+Cell[BoxData[
+    \({{0, 0, 0, 1}, {0, 1, 1, 0}, {1, 0, 1, 0}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(T\  = \ Tetta[bf, \ 2, \ 3]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 
+      0, 0, 0, 0, 0, 1, 0, 0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(g\  = \ VectorToLinearZero[T, \ 2, \ 3]\)], "Input"],
+
+Cell[BoxData[
+    \({{{1, 1}, {0, 1, 0}}, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Table[\[IndentingNewLine]StringJoin[\[IndentingNewLine]ToString[
+          TruthToZheg[GetLinearBF[g[\([k, \ 1]\)], \ 2], \ 
+            2]], \ \[IndentingNewLine]"\<=\>", \ \[IndentingNewLine]ToString[
+          TruthToZhegYY[GetLinearBF[g[\([k, \ 2]\)], \ 3], \ 
+            3]]\[IndentingNewLine]], \ \[IndentingNewLine]{k, \ 
+        Length[g]\  - \ 1}\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({"x1 + x2=y2"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(g\  = \ \ VectorToLinearOne[T, \ 2, \ 3]\)], "Input"],
+
+Cell[BoxData[
+    \({{{0, 1}, {0, 0, 1}}, {{1, 0}, {0, 1, 1}}, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Table[\[IndentingNewLine]StringJoin[\[IndentingNewLine]ToString[
+          TruthToZheg[GetLinearBF[g[\([k, \ 1]\)], \ 2], \ 
+            2]], \ \[IndentingNewLine]"\<=\>", \ \[IndentingNewLine]ToString[
+          TruthToZhegYY[GetLinearBF[g[\([k, \ 2]\)], \ 3], \ 
+            3]], \[IndentingNewLine]"\<+ 1\>"\[IndentingNewLine]], \ \
+\[IndentingNewLine]{k, \ Length[g]\  - \ 1}\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({"x2=y3+ 1", "x1=y2 + y3+ 1"}\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.0 for Microsoft Windows",
+ScreenRectangle->{{0, 2136}, {0, 1361}},
+WindowSize->{1842, 983},
+WindowMargins->{{0, Automatic}, {Automatic, 0}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 69, 1, 32, "Text"],
+Cell[1826, 54, 19, 0, 32, "Text"],
+Cell[1848, 56, 148, 3, 46, "Input"],
+
+Cell[CellGroupData[{
+Cell[2021, 63, 55, 1, 28, "Input"],
+Cell[2079, 66, 137, 2, 28, "Output"]
+}, Open  ]],
+Cell[2231, 71, 19, 0, 32, "Text"],
+Cell[2253, 73, 692, 13, 262, "Input"],
+
+Cell[CellGroupData[{
+Cell[2970, 90, 123, 2, 46, "Input"],
+Cell[3096, 94, 36, 1, 28, "Output"]
+}, Open  ]],
+Cell[3147, 98, 19, 0, 32, "Text"],
+Cell[3169, 100, 2021, 37, 730, "Input"],
+
+Cell[CellGroupData[{
+Cell[5215, 141, 61, 1, 28, "Input"],
+Cell[5279, 144, 137, 2, 28, "Output"]
+}, Open  ]],
+Cell[5431, 149, 31, 3, 50, "Text"],
+Cell[5465, 154, 21, 0, 32, "Text"],
+
+Cell[CellGroupData[{
+Cell[5511, 158, 845, 16, 262, "Input"],
+Cell[6359, 176, 46, 1, 28, "Output"]
+}, Open  ]],
+Cell[6420, 180, 1328, 25, 442, "Input"],
+
+Cell[CellGroupData[{
+Cell[7773, 209, 146, 2, 46, "Input"],
+Cell[7922, 213, 38, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7997, 219, 121, 2, 46, "Input"],
+Cell[8121, 223, 363, 10, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8521, 238, 115, 2, 46, "Input"],
+Cell[8639, 242, 4610, 126, 28, "Output"]
+}, Open  ]],
+Cell[13264, 371, 19, 0, 32, "Text"],
+Cell[13286, 373, 876, 16, 262, "Input"],
+
+Cell[CellGroupData[{
+Cell[14187, 393, 171, 3, 64, "Input"],
+Cell[14361, 398, 4018, 108, 28, "Output"],
+Cell[18382, 508, 473, 13, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18892, 526, 165, 3, 64, "Input"],
+Cell[19060, 531, 2961, 81, 28, "Output"],
+Cell[22024, 614, 2576, 71, 28, "Output"]
+}, Open  ]],
+Cell[24615, 688, 19, 0, 32, "Text"],
+Cell[24637, 690, 1603, 30, 514, "Input"],
+Cell[26243, 722, 90, 1, 28, "Input"],
+
+Cell[CellGroupData[{
+Cell[26358, 727, 89, 2, 46, "Input"],
+Cell[26450, 731, 502, 14, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26989, 750, 59, 1, 28, "Input"],
+Cell[27051, 753, 87, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[27175, 759, 58, 1, 28, "Input"],
+Cell[27236, 762, 104, 2, 28, "Output"]
+}, Open  ]],
+Cell[27355, 767, 19, 0, 32, "Text"],
+Cell[27377, 769, 411, 7, 154, "Input"],
+
+Cell[CellGroupData[{
+Cell[27813, 780, 87, 1, 28, "Input"],
+Cell[27903, 783, 38, 1, 28, "Output"]
+}, Open  ]],
+Cell[27956, 787, 21, 0, 32, "Text"],
+Cell[27980, 789, 17, 0, 32, "Text"],
+Cell[28000, 791, 19, 0, 32, "Text"],
+Cell[28022, 793, 21, 0, 32, "Text"],
+Cell[28046, 795, 248, 5, 46, "Input"],
+Cell[28297, 802, 248, 4, 100, "Input"],
+
+Cell[CellGroupData[{
+Cell[28570, 810, 181, 4, 82, "Input"],
+Cell[28754, 816, 40, 1, 28, "Output"],
+Cell[28797, 819, 40, 1, 28, "Output"],
+Cell[28840, 822, 40, 1, 28, "Output"],
+Cell[28883, 825, 40, 1, 28, "Output"]
+}, Open  ]],
+Cell[28938, 829, 21, 0, 32, "Text"],
+Cell[28962, 831, 132, 2, 28, "Input"],
+Cell[29097, 835, 75, 1, 28, "Input"],
+
+Cell[CellGroupData[{
+Cell[29197, 840, 45, 1, 28, "Input"],
+Cell[29245, 843, 43, 1, 28, "Output"]
+}, Open  ]],
+Cell[29303, 847, 19, 0, 32, "Text"],
+Cell[29325, 849, 21, 0, 32, "Text"],
+Cell[29349, 851, 674, 12, 208, "Input"],
+
+Cell[CellGroupData[{
+Cell[30048, 867, 126, 2, 46, "Input"],
+Cell[30177, 871, 76, 1, 28, "Output"]
+}, Open  ]],
+Cell[30268, 875, 40, 1, 28, "Input"],
+Cell[30311, 878, 790, 15, 298, "Input"],
+
+Cell[CellGroupData[{
+Cell[31126, 897, 68, 1, 28, "Input"],
+Cell[31197, 900, 76, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31310, 906, 71, 1, 28, "Input"],
+Cell[31384, 909, 43, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[31464, 915, 176, 3, 46, "Input"],
+Cell[31643, 920, 737, 20, 28, "Output"],
+Cell[32383, 942, 43, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32463, 948, 179, 4, 64, "Input"],
+Cell[32645, 954, 737, 20, 28, "Output"],
+Cell[33385, 976, 35, 1, 28, "Output"]
+}, Open  ]],
+Cell[33435, 980, 26, 0, 28, "Input"],
+Cell[33464, 982, 2259, 40, 712, "Input"],
+
+Cell[CellGroupData[{
+Cell[35748, 1026, 178, 3, 64, "Input"],
+Cell[35929, 1031, 363, 10, 28, "Output"],
+Cell[36295, 1043, 57, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[36389, 1049, 181, 3, 64, "Input"],
+Cell[36573, 1054, 373, 10, 28, "Output"],
+Cell[36949, 1066, 57, 1, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[37043, 1072, 79, 1, 28, "Input"],
+Cell[37125, 1075, 363, 10, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[37525, 1090, 301, 6, 82, "Input"],
+Cell[37829, 1098, 10403, 283, 28, "Output"],
+Cell[48235, 1383, 82, 1, 45, "Output"],
+Cell[48320, 1386, 1196, 31, 28, "Output"]
+}, Open  ]],
+Cell[49531, 1420, 3907, 75, 1378, "Input"],
+
+Cell[CellGroupData[{
+Cell[53463, 1499, 55, 1, 30, "Input"],
+Cell[53521, 1502, 137, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[53695, 1509, 261, 5, 110, "Input"],
+Cell[53959, 1516, 5148, 142, 29, "Output"],
+Cell[59110, 1660, 7507, 204, 29, "Output"],
+Cell[66620, 1866, 35, 1, 29, "Output"],
+Cell[66658, 1869, 36, 1, 29, "Output"],
+Cell[66697, 1872, 70, 1, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66804, 1878, 328, 6, 130, "Input"],
+Cell[67135, 1886, 363, 10, 29, "Output"],
+Cell[67501, 1898, 1515, 41, 29, "Output"],
+Cell[69019, 1941, 35, 1, 29, "Output"],
+Cell[69057, 1944, 35, 1, 29, "Output"],
+Cell[69095, 1947, 52, 1, 29, "Output"]
+}, Open  ]],
+Cell[69162, 1951, 36, 1, 30, "Input"],
+Cell[69201, 1954, 18, 0, 33, "Text"],
+Cell[69222, 1956, 1193, 23, 470, "Input"],
+Cell[70418, 1981, 3544, 60, 1270, "Input"],
+
+Cell[CellGroupData[{
+Cell[73987, 2045, 137, 2, 50, "Input"],
+Cell[74127, 2049, 76, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[74240, 2055, 60, 1, 30, "Input"],
+Cell[74303, 2058, 137, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[74477, 2065, 72, 1, 30, "Input"],
+Cell[74552, 2068, 58, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[74647, 2074, 409, 6, 170, "Input"],
+Cell[75059, 2082, 48, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[75144, 2088, 73, 1, 30, "Input"],
+Cell[75220, 2091, 79, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[75336, 2097, 432, 6, 190, "Input"],
+Cell[75771, 2105, 63, 1, 29, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
