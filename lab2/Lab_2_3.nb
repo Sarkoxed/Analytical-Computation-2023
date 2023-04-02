@@ -1,0 +1,1764 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.0'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     48083,       1491]*)
+(*NotebookOutlinePosition[     48731,       1513]*)
+(*  CellTagsIndexPosition[     48687,       1509]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[{
+    \(\(ClearAll[AdjacencyMatrix];\)\), "\[IndentingNewLine]", 
+    \(\(AdjacencyMatrix[
+          n_] := \[IndentingNewLine]Module[{tmp1, \ tmp2, \ res, \ i, \ 
+            j}, \[IndentingNewLine]res\  = \ 
+            Table[Table[0, \ {2^n}], \ {2^n}]; \[IndentingNewLine]For[
+            i\  = \ 1, \ 
+            i\  \[LessEqual] \ 
+              2^n, \ \(i++\), \[IndentingNewLine]\(For[j\  = \ 1, \ 
+                j\  \[LessEqual] \ 
+                  2^n, \ \(j++\), \[IndentingNewLine]tmp1\  = \ 
+                  IntegerDigits[i - 1, \ 2, \ n]; \[IndentingNewLine]tmp2\  = 
+                  IntegerDigits[j - 1, \ 2, \ n]; \[IndentingNewLine]If[
+                  Take[tmp1, \ \(-n\) + 1]\  \[Equal] \ 
+                    Take[tmp2, \ 
+                      n\  - \ 1], \[IndentingNewLine]\(res[\([i, \ 
+                          j]\)]\  = \ 
+                      1;\)\[IndentingNewLine]];\[IndentingNewLine]];\)\
+\[IndentingNewLine]]; \[IndentingNewLine]res\[IndentingNewLine]];\)\)}], \
+"Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(n\  = \ 2;\)\), "\[IndentingNewLine]", 
+    \(M\  = AdjacencyMatrix[n]\)}], "Input"],
+
+Cell[BoxData[
+    \({{1, 1, 0, 0}, {0, 0, 1, 1}, {1, 1, 0, 0}, {0, 0, 1, 1}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[RemoveRowColumn];\)\), "\[IndentingNewLine]", 
+    \(\(\(RemoveRowColumn[A_, \ 
+          i_]\  := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp\  \
+= \ Delete[A, \ i]; \[IndentingNewLine]Transpose[
+            Delete[Transpose[tmp], \ 
+              i]]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[GetNumberOfEulerCycles];\)\), "\[IndentingNewLine]", 
+    \(\(\(GetNumberOfEulerCycles[Adj_, \ 
+          n_]\  := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp\  \
+= \ 2\ *\ IdentityMatrix[2^n]\  - \ Adj; \[IndentingNewLine]Det[
+            RemoveRowColumn[tmp, \ 
+              1]]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[GetNumberOfDeBruijn];\)\), "\[IndentingNewLine]", 
+    \(\(GetNumberOfDeBruijn[n_]\  := \ 
+        2^\((2^\((n - 1)\))\)\ /\ 2^n;\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(GetNumberOfEulerCycles[M, \ n]\), "\[IndentingNewLine]", 
+    \(GetNumberOfDeBruijn[n + 1]\)}], "Input"],
+
+Cell[BoxData[
+    \(2\)], "Output"],
+
+Cell[BoxData[
+    \(2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[GetAllEulerCycles];\)\), "\[IndentingNewLine]", 
+    \(\(GetAllEulerCycles[Adj_, \ n_, \ cycle_, \ 
+          cur_]\  := \ \[IndentingNewLine]\(GetAllEulerCycles[Adj, \ n, \ 
+            cycle, \ cur]\  = \[IndentingNewLine]Module[{tmpadj, \ 
+              tmpcycle, \ tmpres, \ res, \ \ i, \ j}, \[IndentingNewLine]If[
+              Adj\  \[Equal] \ 
+                Table[Table[
+                    0, \ {2^n}], \ {2^
+                      n}], \[IndentingNewLine]\(Return[{{cycle}, \ True}, \ 
+                  Module];\)\[IndentingNewLine]]; \[IndentingNewLine]\
+\[IndentingNewLine]If[
+              And[Or[cur\  \[Equal] \ 0, cur\  \[Equal] \ 2^n\  - \ 1], \ 
+                Adj[\([cur\  + \ 1, \ cur\  + \ 1]\)]\  \[Equal] \ 
+                  1], \[IndentingNewLine]tmpadj\  = \ 
+                Adj; \[IndentingNewLine]tmpcycle\  = \ 
+                cycle; \[IndentingNewLine]tmpadj[\([cur\  + \ 1, \ 
+                    cur\  + \ 1]\)]\  = \ 
+                0; \[IndentingNewLine]tmpcycle\  = \ 
+                Append[tmpcycle, \ cur]; \[IndentingNewLine]Return[
+                GetAllEulerCycles[\ tmpadj, \ n, \ tmpcycle, \ cur], \ 
+                Module];\[IndentingNewLine]]; \[IndentingNewLine]\
+\[IndentingNewLine]If[
+              And[cur\  \[Equal] \ 0, \ 
+                Length[cycle]\  \[NotEqual] \ 2^\((n\  + \ 1)\)\  + \ 1, \ 
+                Length[cycle]\  \[NotEqual] \ 
+                  2], \[IndentingNewLine]\(Return[{{cycle}, \ False}, \ 
+                  Module];\)\[IndentingNewLine]]; \[IndentingNewLine]\
+\[IndentingNewLine]res\  = \ {}; \[IndentingNewLine]For[i\  = \ 0, \ 
+              i\  < \ 2^n, \ \(i++\), \[IndentingNewLine]\(If[
+                  Adj[\([cur\  + \ 1, \ i\  + \ 1]\)]\  \[Equal] \ 
+                    1, \[IndentingNewLine]tmpadj\  = \ 
+                    Adj; \[IndentingNewLine]tmpcycle\  = \ 
+                    cycle; \[IndentingNewLine]tmpadj[\([cur\  + \ 1, \ 
+                        i\  + \ 1]\)]\  = \ 
+                    0; \[IndentingNewLine]tmpcycle\  = \ 
+                    Append[tmpcycle, \ i]; \[IndentingNewLine]tmpres\  = \ 
+                    GetAllEulerCycles[tmpadj, \ n, \ tmpcycle, \ 
+                      i]; \[IndentingNewLine]If[
+                    tmpres[\([2]\)], \[IndentingNewLine]\(res\  = \ 
+                        Join[res, \ 
+                          tmpres[\([1]\)]];\)\[IndentingNewLine]];\
+\[IndentingNewLine]];\)\[IndentingNewLine]]; \[IndentingNewLine]{res, \ 
+              True}\[IndentingNewLine]]\);\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(cycles\  = \ \(GetAllEulerCycles[M, \ n, \ {0}, \ 
+            0]\)[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(For[i\  = \ 1, \ 
+        i\  \[LessEqual] \ 
+          Length[cycles], \ \(i++\), \[IndentingNewLine]Print[
+          i]; \[IndentingNewLine]For[j\  = \ 1, \ 
+          j\  \[LessEqual] \ 
+            2^\((n\  + \ 1)\), \ \(j++\), \[IndentingNewLine]tmp\  = \ 
+            IntegerDigits[cycles[\([i, \ j]\)], \ 2, \ 
+              n]; \[IndentingNewLine]tmp1\  = \ 
+            Mod[cycles[\([i, \ j\  + \ 1]\)], \ 2]; \[IndentingNewLine]Print[
+            Append[tmp, \ 
+              tmp1]];\[IndentingNewLine]]; \
+\[IndentingNewLine]Print["\<_______________________________\>"];\
+\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(1\)], "Print"],
+
+Cell[BoxData[
+    \({0, 0, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 0, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 1, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 1, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("_______________________________"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \({0, 0, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 0, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 1, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 1, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1}\)], "Print"],
+
+Cell[BoxData[
+    \({0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("_______________________________"\)], "Print"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[TransFormVec];\)\), "\n", 
+    \(\(TransFormVec[{0}, 0] = {0};\)\), "\n", 
+    \(\(TransFormVec[{1}, 0] = {1};\)\), "\n", 
+    \(\(\(TransFormVec[vec_, 
+          n_] := \(TransFormVec[vec, 
+            n] = \[IndentingNewLine]Module[{tmp1, tmp2, 
+              x}, \[IndentingNewLine]If[
+              Length[vec] \[NotEqual] 2^n, \[IndentingNewLine]Return[0, 
+                Module]\[IndentingNewLine]]; \[IndentingNewLine]tmp1 = 
+              TransFormVec[Take[vec, 2^\((n - 1)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              TransFormVec[Take[vec, \(-2^\((n - 1)\)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              BitXor[tmp1, tmp2]; \[IndentingNewLine]Join[tmp1, 
+              tmp2]\[IndentingNewLine]]\);\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[Zheg];\)\), "\n", 
+    \(\(Zheg[vec_, 
+          n_] := \[IndentingNewLine]Module[{f, tmp, tmp11, mon, \ 
+            i}, \[IndentingNewLine]tmp = 
+            Table[StringForm["\<x``\>", a], {a, 0, 
+                n - 1}]; \[IndentingNewLine]f = 0; \[IndentingNewLine]For[
+            i = 0, i < 2^n, \(i++\), \[IndentingNewLine]If[
+              vec[\([i + 1]\)] \[Equal] 
+                0, \[IndentingNewLine]\(Continue[];\)\[IndentingNewLine]]; \
+\[IndentingNewLine]mon = 1; \[IndentingNewLine]tmp11 = 
+              Reverse[IntegerDigits[i, 2, n]]; \[IndentingNewLine]For[j = 0, 
+              j < n, \(j++\), \[IndentingNewLine]\(If[
+                  tmp11[\([j + 1]\)] \[Equal] 
+                    1, \[IndentingNewLine]\(mon *= 
+                      tmp[\([j + 
+                            1]\)];\)\[IndentingNewLine]];\)\[IndentingNewLine]\
+]; \[IndentingNewLine]f += 
+              vec[\([i + 1]\)]*
+                mon;\[IndentingNewLine]]; \[IndentingNewLine]f\
+\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
+    \(\(\(TruthToZheg[vec_, \ n_]\  := \ 
+        Zheg[TransFormVec[vec, \ n], \ n];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[MonomsDeg1];\)\), "\[IndentingNewLine]", 
+    \(\(MonomsDeg1[f_, \ 
+          n_]\  := \[IndentingNewLine]Module[{tmp, \ i, \ 
+            res}, \[IndentingNewLine]tmp\  = \ 
+            TransFormVec[f, \ n]; \[IndentingNewLine]res\  = \ 
+            0; \[IndentingNewLine]For[i\  = \ 0, \ 
+            i\  < \ 
+              n, \ \(i++\), \[IndentingNewLine]\(res\  += \ 
+                tmp[\([2^i + 
+                      1]\)];\)\[IndentingNewLine]]; \[IndentingNewLine]res\
+\[IndentingNewLine]];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(ClearAll[TransFormHad];\)\), "\n", 
+    \(\(TransFormHad[vec_, 1] = {{1, 1}, {1, \(-1\)}} . vec;\)\), "\n", 
+    \(\(TransFormHad[vec_, 
+          n_] := \(TransFormHad[vec, 
+            n] = \[IndentingNewLine]Module[{tmp1, tmp2, tmp3, tmp4, 
+              x}, \[IndentingNewLine]If[
+              Length[vec] \[NotEqual] 2^n, \[IndentingNewLine]Return[0, 
+                Module]\[IndentingNewLine]]; \[IndentingNewLine]tmp1 = 
+              TransFormHad[Take[vec, 2^\((n - 1)\)], 
+                n - 1]; \[IndentingNewLine]tmp2 = 
+              TransFormHad[Take[vec, \(-2^\((n - 1)\)\)], 
+                n - 1]; \[IndentingNewLine]tmp3 = 
+              tmp1 + tmp2; \[IndentingNewLine]tmp4 = 
+              tmp1 - tmp2; \[IndentingNewLine]Join[tmp3, 
+              tmp4]\[IndentingNewLine]]\);\)\[IndentingNewLine]\), "\n", 
+    \(\(ClearAll[HadamardCoefficients];\)\), "\[IndentingNewLine]", 
+    \(\(HadamardCoefficients[vec_, 
+          n_] := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp = 
+            1 - 2  vec; \[IndentingNewLine]TransFormHad[tmp, 
+            n]\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(ClearAll[GetDeBruijnFunctions];\)\), "\[IndentingNewLine]", 
+    \(\(GetDeBruijnFunctions[
+          n_] := \[IndentingNewLine]Module[{Adj, \ eucycles, \ gamcycles, \ 
+            i, \ j, \ tmp, \ tmp1, \ tmp2, \ 
+            tmpfunc}, \[IndentingNewLine]Adj\  = 
+            AdjacencyMatrix[
+              n - 1]; \[IndentingNewLine]\[IndentingNewLine]eucycles\  = \ \
+\(GetAllEulerCycles[Adj, \ n - 1, \ {0}, \ 
+                0]\)[\([1]\)]; \
+\[IndentingNewLine]\[IndentingNewLine]gamcycles\  = \ {}; \
+\[IndentingNewLine]For[i\  = \ 1, \ 
+            i\  \[LessEqual] \ 
+              Length[eucycles], \ \(i++\), \[IndentingNewLine]tmp\  = \ {}; \
+\[IndentingNewLine]For[j\  = \ 1, \ 
+              j\  \[LessEqual] \ 
+                2^n, \ \(j++\), \[IndentingNewLine]tmp1\  = \ 
+                IntegerDigits[eucycles[\([i, \ j]\)], \ 2, \ 
+                  n - 1]; \[IndentingNewLine]tmp1\  = \ 
+                Append[tmp1, \ 
+                  Mod[eucycles[\([i, \ j\  + \ 1]\)], \ 
+                    2]]; \[IndentingNewLine]tmp = \ 
+                Append[tmp, \ 
+                  tmp1];\[IndentingNewLine]]; \[IndentingNewLine]gamcycles\  \
+= \ Append[gamcycles, \ 
+                tmp];\[IndentingNewLine]]; \[IndentingNewLine]\
+\[IndentingNewLine]functions\  = \ {}; \[IndentingNewLine]For[i\  = \ 1, \ 
+            i\  \[LessEqual] \ 
+              Length[gamcycles], \ \(i++\), \[IndentingNewLine]tmpfunc\  = \ 
+              Table[0, \ {2^n}]; \[IndentingNewLine]For[j\  = \ 1, \ 
+              j\  \[LessEqual] \ 
+                2^n, \ \(j++\), \[IndentingNewLine]tmp1\  = \ 
+                gamcycles[\([i, \ j]\)]; \[IndentingNewLine]tmp2\  = \ 
+                gamcycles[\([i, \ 
+                    Mod[j\ , \ 2^n]\  + \ 
+                      1]\)]; \[IndentingNewLine]tmpfunc[\([FromDigits[
+                        Reverse[tmp1], 2]\  + \ 1]\)]\  = \ 
+                tmp2[\([n]\)];\[IndentingNewLine]]; \
+\[IndentingNewLine]functions\  = \ 
+              Append[functions, \ 
+                tmpfunc];\[IndentingNewLine]]; \[IndentingNewLine]{functions, \
+\ Table[Table[IntegerDigits[eucycles[\([j, \ i]\)], \ 2, \ n - 1], \ {i, \ 
+                  2^n}], \ {j, \ 
+                Length[eucycles]}]}\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(n\  = \ 4;\)\), "\[IndentingNewLine]", 
+    \(\(res\  = \ GetDeBruijnFunctions[n];\)\), "\[IndentingNewLine]", 
+    \(\(fs\  = \ res[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(cycles\  = \ res[\([2]\)];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(Print["\<Number of De Bruijn funcs:\>"];\)\), "\[IndentingNewLine]", 
+    \(\(Print[GetNumberOfDeBruijn[n]];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<__________________________________________\>"];\)\), "\
+\[IndentingNewLine]", 
+    \(\(For[i\  = \ 1, \ 
+        i\  \[LessEqual] \ 
+          Length[fs], \ \(i++\), \[IndentingNewLine]Print["\<Function \>", \ 
+          i]; \[IndentingNewLine]Print["\<Graph Cycle:\>"]; \
+\[IndentingNewLine]Print[
+          cycles[\([i]\)]]; \[IndentingNewLine]Print["\<Truth Table: \>"]; \
+\[IndentingNewLine]Print[
+          fs[\([i]\)]]; \[IndentingNewLine]Print["\<Zhegalkin:\>"]; \
+\[IndentingNewLine]Print[
+          TruthToZheg[fs[\([i]\)], \ 
+            n]]; \[IndentingNewLine]Print["\<Monoms of deg 1:\>"]; \
+\[IndentingNewLine]Print[
+          MonomsDeg1[fs[\([i]\)], \ 
+            n]]; \[IndentingNewLine]Print["\<Walsh-Hadamard Coefficients: \
+\>"]; \[IndentingNewLine]Print[
+          HadamardCoefficients[fs[\([i]\)], \ 
+            n]]; \[IndentingNewLine]Print["\<_________________________________\
+_________\>"];\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \("Number of De Bruijn funcs:"\)], "Print"],
+
+Cell[BoxData[
+    \(16\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]1\),
+      SequenceForm[ "Function ", 1],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 
+        1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 
+        1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 12, 0, \(-4\), 0, \(-4\), 0, \(-4\), 0, \(-4\), 
+      0, \(-4\), 0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]2\),
+      SequenceForm[ "Function ", 2],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 
+        1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 
+        1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 4, 0, \(-4\), 0, 4, 0, 4, 0, \(-4\), 0, \(-12\), 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]3\),
+      SequenceForm[ "Function ", 3],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 
+        0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 
+        1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 4, 0, 4, 0, \(-4\), 0, \(-12\), 0, \(-4\), 0, \(-4\), 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]4\),
+      SequenceForm[ "Function ", 4],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 
+        0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 
+        1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-4\), 0, 4, 0, 4, 0, \(-4\), 0, \(-4\), 0, \(-12\), 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]5\),
+      SequenceForm[ "Function ", 5],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 
+        1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-4\), 0, 4, 0, 4, 0, 4, 0, \(-12\), 0, \(-4\), 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]6\),
+      SequenceForm[ "Function ", 6],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 
+        1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 
+        1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-12\), 0, 4, 0, 4, 0, 4, 0, \(-4\), 0, \(-4\), 0, \(-4\), 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]7\),
+      SequenceForm[ "Function ", 7],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 
+        1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 4, 0, 4, 0, \(-4\), 0, \(-4\), 0, \(-12\), 0, 4, 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]8\),
+      SequenceForm[ "Function ", 8],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 
+        1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 0, 
+        1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+        StringForm[ "x``", 3],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 4, 0, \(-4\), 0, 4, 0, \(-4\), 0, \(-12\), 0, \(-4\), 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]9\),
+      SequenceForm[ "Function ", 9],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}, {0, 
+        0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-4\), 0, \(-4\), 0, \(-4\), 0, 4, 0, \(-12\), 0, 4, 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]10\),
+      SequenceForm[ "Function ", 10],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 
+        1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 
+        1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(1\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-12\), 0, 4, 0, \(-4\), 0, \(-4\), 0, \(-4\), 0, \(-4\), 0, 4, 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]11\),
+      SequenceForm[ "Function ", 11],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 
+        1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 
+        0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, 4, 0, \(-4\), 0, \(-12\), 0, 4, 0, \(-4\), 0, 4, 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]12\),
+      SequenceForm[ "Function ", 12],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 1}, {0, 
+        1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-4\), 0, 4, 0, \(-12\), 0, \(-4\), 0, \(-4\), 0, 4, 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]13\),
+      SequenceForm[ "Function ", 13],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 
+        1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-12\), 0, \(-4\), 0, 4, 0, \(-4\), 0, 4, 0, \(-4\), 0, 4, 
+      0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]14\),
+      SequenceForm[ "Function ", 14],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 
+        1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 
+        1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(1\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-12\), 0, \(-4\), 0, \(-4\), 0, 4, 0, 4, 0, \(-4\), 0, \(-4\), 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]15\),
+      SequenceForm[ "Function ", 15],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 
+        1, 0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 
+        0}, {0, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+        StringForm[ "x``", 2],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(3\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-4\), 0, \(-4\), 0, \(-4\), 0, 12, 0, \(-4\), 
+      0, \(-4\), 0, \(-4\)}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Function "\[InvisibleSpace]16\),
+      SequenceForm[ "Function ", 16],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("Graph Cycle:"\)], "Print"],
+
+Cell[BoxData[
+    \({{0, 0, 0}, {0, 0, 0}, {0, 0, 1}, {0, 1, 1}, {1, 1, 1}, {1, 1, 1}, {1, 
+        1, 0}, {1, 0, 1}, {0, 1, 1}, {1, 1, 0}, {1, 0, 0}, {0, 0, 1}, {0, 1, 
+        0}, {1, 0, 1}, {0, 1, 0}, {1, 0, 0}}\)], "Print"],
+
+Cell[BoxData[
+    \("Truth Table: "\)], "Print"],
+
+Cell[BoxData[
+    \({1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0}\)], "Print"],
+
+Cell[BoxData[
+    \("Zhegalkin:"\)], "Print"],
+
+Cell[BoxData[
+    RowBox[{"1", "+", 
+      InterpretationBox["\<\"x\\!\\(0\\)\"\>",
+        StringForm[ "x``", 0],
+        Editable->False], "+", 
+      InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+        StringForm[ "x``", 1],
+        Editable->False], "+", 
+      RowBox[{
+        InterpretationBox["\<\"x\\!\\(1\\)\"\>",
+          StringForm[ "x``", 1],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(2\\)\"\>",
+          StringForm[ "x``", 2],
+          Editable->False], " ", 
+        InterpretationBox["\<\"x\\!\\(3\\)\"\>",
+          StringForm[ "x``", 3],
+          Editable->False]}]}]], "Print"],
+
+Cell[BoxData[
+    \("Monoms of deg 1:"\)], "Print"],
+
+Cell[BoxData[
+    \(2\)], "Print"],
+
+Cell[BoxData[
+    \("Walsh-Hadamard Coefficients: "\)], "Print"],
+
+Cell[BoxData[
+    \({0, \(-4\), 0, \(-12\), 0, 4, 0, \(-4\), 0, 4, 0, \(-4\), 0, \(-4\), 0, 
+      4}\)], "Print"],
+
+Cell[BoxData[
+    \("__________________________________________"\)], "Print"]
+}, Open  ]]
+},
+FrontEndVersion->"5.0 for Microsoft Windows",
+ScreenRectangle->{{0, 1858}, {0, 1022}},
+WindowSize->{1403, 891},
+WindowMargins->{{180, Automatic}, {Automatic, -7}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 1027, 19, 310, "Input"],
+
+Cell[CellGroupData[{
+Cell[2806, 74, 107, 2, 50, "Input"],
+Cell[2916, 78, 90, 1, 29, "Output"]
+}, Open  ]],
+Cell[3021, 82, 930, 17, 330, "Input"],
+
+Cell[CellGroupData[{
+Cell[3976, 103, 125, 2, 50, "Input"],
+Cell[4104, 107, 35, 1, 29, "Output"],
+Cell[4142, 110, 35, 1, 29, "Output"]
+}, Open  ]],
+Cell[4192, 114, 2568, 43, 710, "Input"],
+
+Cell[CellGroupData[{
+Cell[6785, 161, 758, 15, 210, "Input"],
+Cell[7546, 178, 34, 1, 25, "Print"],
+Cell[7583, 181, 42, 1, 25, "Print"],
+Cell[7628, 184, 42, 1, 25, "Print"],
+Cell[7673, 187, 42, 1, 25, "Print"],
+Cell[7718, 190, 42, 1, 25, "Print"],
+Cell[7763, 193, 42, 1, 25, "Print"],
+Cell[7808, 196, 42, 1, 25, "Print"],
+Cell[7853, 199, 42, 1, 25, "Print"],
+Cell[7898, 202, 42, 1, 25, "Print"],
+Cell[7943, 205, 66, 1, 25, "Print"],
+Cell[8012, 208, 34, 1, 25, "Print"],
+Cell[8049, 211, 42, 1, 25, "Print"],
+Cell[8094, 214, 42, 1, 25, "Print"],
+Cell[8139, 217, 42, 1, 25, "Print"],
+Cell[8184, 220, 42, 1, 25, "Print"],
+Cell[8229, 223, 42, 1, 25, "Print"],
+Cell[8274, 226, 42, 1, 25, "Print"],
+Cell[8319, 229, 42, 1, 25, "Print"],
+Cell[8364, 232, 42, 1, 25, "Print"],
+Cell[8409, 235, 66, 1, 25, "Print"]
+}, Open  ]],
+Cell[8490, 239, 3772, 71, 1370, "Input"],
+Cell[12265, 312, 2293, 43, 610, "Input"],
+Cell[14561, 357, 245, 4, 90, "Input"],
+
+Cell[CellGroupData[{
+Cell[14831, 365, 1132, 22, 350, "Input"],
+Cell[15966, 389, 61, 1, 25, "Print"],
+Cell[16030, 392, 35, 1, 25, "Print"],
+Cell[16068, 395, 77, 1, 25, "Print"],
+Cell[16148, 398, 141, 3, 25, "Print"],
+Cell[16292, 403, 47, 1, 25, "Print"],
+Cell[16342, 406, 227, 3, 25, "Print"],
+Cell[16572, 411, 48, 1, 25, "Print"],
+Cell[16623, 414, 81, 1, 25, "Print"],
+Cell[16707, 417, 45, 1, 25, "Print"],
+Cell[16755, 420, 1484, 41, 25, "Print"],
+Cell[18242, 463, 51, 1, 25, "Print"],
+Cell[18296, 466, 34, 1, 25, "Print"],
+Cell[18333, 469, 64, 1, 25, "Print"],
+Cell[18400, 472, 124, 2, 25, "Print"],
+Cell[18527, 476, 77, 1, 25, "Print"],
+Cell[18607, 479, 141, 3, 25, "Print"],
+Cell[18751, 484, 47, 1, 25, "Print"],
+Cell[18801, 487, 227, 3, 25, "Print"],
+Cell[19031, 492, 48, 1, 25, "Print"],
+Cell[19082, 495, 81, 1, 25, "Print"],
+Cell[19166, 498, 45, 1, 25, "Print"],
+Cell[19214, 501, 986, 27, 25, "Print"],
+Cell[20203, 530, 51, 1, 25, "Print"],
+Cell[20257, 533, 34, 1, 25, "Print"],
+Cell[20294, 536, 64, 1, 25, "Print"],
+Cell[20361, 539, 114, 2, 25, "Print"],
+Cell[20478, 543, 77, 1, 25, "Print"],
+Cell[20558, 546, 141, 3, 25, "Print"],
+Cell[20702, 551, 47, 1, 25, "Print"],
+Cell[20752, 554, 227, 3, 25, "Print"],
+Cell[20982, 559, 48, 1, 25, "Print"],
+Cell[21033, 562, 81, 1, 25, "Print"],
+Cell[21117, 565, 45, 1, 25, "Print"],
+Cell[21165, 568, 627, 17, 25, "Print"],
+Cell[21795, 587, 51, 1, 25, "Print"],
+Cell[21849, 590, 34, 1, 25, "Print"],
+Cell[21886, 593, 64, 1, 25, "Print"],
+Cell[21953, 596, 114, 2, 25, "Print"],
+Cell[22070, 600, 77, 1, 25, "Print"],
+Cell[22150, 603, 141, 3, 25, "Print"],
+Cell[22294, 608, 47, 1, 25, "Print"],
+Cell[22344, 611, 227, 3, 25, "Print"],
+Cell[22574, 616, 48, 1, 25, "Print"],
+Cell[22625, 619, 81, 1, 25, "Print"],
+Cell[22709, 622, 45, 1, 25, "Print"],
+Cell[22757, 625, 1125, 31, 25, "Print"],
+Cell[23885, 658, 51, 1, 25, "Print"],
+Cell[23939, 661, 34, 1, 25, "Print"],
+Cell[23976, 664, 64, 1, 25, "Print"],
+Cell[24043, 667, 114, 2, 25, "Print"],
+Cell[24160, 671, 77, 1, 25, "Print"],
+Cell[24240, 674, 141, 3, 25, "Print"],
+Cell[24384, 679, 47, 1, 25, "Print"],
+Cell[24434, 682, 227, 3, 25, "Print"],
+Cell[24664, 687, 48, 1, 25, "Print"],
+Cell[24715, 690, 81, 1, 25, "Print"],
+Cell[24799, 693, 45, 1, 25, "Print"],
+Cell[24847, 696, 986, 27, 25, "Print"],
+Cell[25836, 725, 51, 1, 25, "Print"],
+Cell[25890, 728, 34, 1, 25, "Print"],
+Cell[25927, 731, 64, 1, 25, "Print"],
+Cell[25994, 734, 114, 2, 25, "Print"],
+Cell[26111, 738, 77, 1, 25, "Print"],
+Cell[26191, 741, 141, 3, 25, "Print"],
+Cell[26335, 746, 47, 1, 25, "Print"],
+Cell[26385, 749, 227, 3, 25, "Print"],
+Cell[26615, 754, 48, 1, 25, "Print"],
+Cell[26666, 757, 81, 1, 25, "Print"],
+Cell[26750, 760, 45, 1, 25, "Print"],
+Cell[26798, 763, 1125, 31, 25, "Print"],
+Cell[27926, 796, 51, 1, 25, "Print"],
+Cell[27980, 799, 34, 1, 25, "Print"],
+Cell[28017, 802, 64, 1, 25, "Print"],
+Cell[28084, 805, 114, 2, 25, "Print"],
+Cell[28201, 809, 77, 1, 25, "Print"],
+Cell[28281, 812, 141, 3, 25, "Print"],
+Cell[28425, 817, 47, 1, 25, "Print"],
+Cell[28475, 820, 227, 3, 25, "Print"],
+Cell[28705, 825, 48, 1, 25, "Print"],
+Cell[28756, 828, 81, 1, 25, "Print"],
+Cell[28840, 831, 45, 1, 25, "Print"],
+Cell[28888, 834, 986, 27, 25, "Print"],
+Cell[29877, 863, 51, 1, 25, "Print"],
+Cell[29931, 866, 34, 1, 25, "Print"],
+Cell[29968, 869, 64, 1, 25, "Print"],
+Cell[30035, 872, 114, 2, 25, "Print"],
+Cell[30152, 876, 77, 1, 25, "Print"],
+Cell[30232, 879, 141, 3, 25, "Print"],
+Cell[30376, 884, 47, 1, 25, "Print"],
+Cell[30426, 887, 227, 3, 25, "Print"],
+Cell[30656, 892, 48, 1, 25, "Print"],
+Cell[30707, 895, 81, 1, 25, "Print"],
+Cell[30791, 898, 45, 1, 25, "Print"],
+Cell[30839, 901, 1125, 31, 25, "Print"],
+Cell[31967, 934, 51, 1, 25, "Print"],
+Cell[32021, 937, 34, 1, 25, "Print"],
+Cell[32058, 940, 64, 1, 25, "Print"],
+Cell[32125, 943, 114, 2, 25, "Print"],
+Cell[32242, 947, 77, 1, 25, "Print"],
+Cell[32322, 950, 141, 3, 25, "Print"],
+Cell[32466, 955, 47, 1, 25, "Print"],
+Cell[32516, 958, 227, 3, 25, "Print"],
+Cell[32746, 963, 48, 1, 25, "Print"],
+Cell[32797, 966, 81, 1, 25, "Print"],
+Cell[32881, 969, 45, 1, 25, "Print"],
+Cell[32929, 972, 1125, 31, 25, "Print"],
+Cell[34057, 1005, 51, 1, 25, "Print"],
+Cell[34111, 1008, 34, 1, 25, "Print"],
+Cell[34148, 1011, 64, 1, 25, "Print"],
+Cell[34215, 1014, 114, 2, 25, "Print"],
+Cell[34332, 1018, 77, 1, 25, "Print"],
+Cell[34412, 1021, 143, 3, 25, "Print"],
+Cell[34558, 1026, 47, 1, 25, "Print"],
+Cell[34608, 1029, 227, 3, 25, "Print"],
+Cell[34838, 1034, 48, 1, 25, "Print"],
+Cell[34889, 1037, 81, 1, 25, "Print"],
+Cell[34973, 1040, 45, 1, 25, "Print"],
+Cell[35021, 1043, 766, 21, 25, "Print"],
+Cell[35790, 1066, 51, 1, 25, "Print"],
+Cell[35844, 1069, 34, 1, 25, "Print"],
+Cell[35881, 1072, 64, 1, 25, "Print"],
+Cell[35948, 1075, 114, 2, 25, "Print"],
+Cell[36065, 1079, 77, 1, 25, "Print"],
+Cell[36145, 1082, 143, 3, 25, "Print"],
+Cell[36291, 1087, 47, 1, 25, "Print"],
+Cell[36341, 1090, 227, 3, 25, "Print"],
+Cell[36571, 1095, 48, 1, 25, "Print"],
+Cell[36622, 1098, 81, 1, 25, "Print"],
+Cell[36706, 1101, 45, 1, 25, "Print"],
+Cell[36754, 1104, 986, 27, 25, "Print"],
+Cell[37743, 1133, 51, 1, 25, "Print"],
+Cell[37797, 1136, 34, 1, 25, "Print"],
+Cell[37834, 1139, 64, 1, 25, "Print"],
+Cell[37901, 1142, 114, 2, 25, "Print"],
+Cell[38018, 1146, 77, 1, 25, "Print"],
+Cell[38098, 1149, 143, 3, 25, "Print"],
+Cell[38244, 1154, 47, 1, 25, "Print"],
+Cell[38294, 1157, 227, 3, 25, "Print"],
+Cell[38524, 1162, 48, 1, 25, "Print"],
+Cell[38575, 1165, 81, 1, 25, "Print"],
+Cell[38659, 1168, 45, 1, 25, "Print"],
+Cell[38707, 1171, 1125, 31, 25, "Print"],
+Cell[39835, 1204, 51, 1, 25, "Print"],
+Cell[39889, 1207, 34, 1, 25, "Print"],
+Cell[39926, 1210, 64, 1, 25, "Print"],
+Cell[39993, 1213, 114, 2, 25, "Print"],
+Cell[40110, 1217, 77, 1, 25, "Print"],
+Cell[40190, 1220, 143, 3, 25, "Print"],
+Cell[40336, 1225, 47, 1, 25, "Print"],
+Cell[40386, 1228, 227, 3, 25, "Print"],
+Cell[40616, 1233, 48, 1, 25, "Print"],
+Cell[40667, 1236, 81, 1, 25, "Print"],
+Cell[40751, 1239, 45, 1, 25, "Print"],
+Cell[40799, 1242, 1125, 31, 25, "Print"],
+Cell[41927, 1275, 51, 1, 25, "Print"],
+Cell[41981, 1278, 34, 1, 25, "Print"],
+Cell[42018, 1281, 64, 1, 25, "Print"],
+Cell[42085, 1284, 114, 2, 25, "Print"],
+Cell[42202, 1288, 77, 1, 25, "Print"],
+Cell[42282, 1291, 143, 3, 25, "Print"],
+Cell[42428, 1296, 47, 1, 25, "Print"],
+Cell[42478, 1299, 227, 3, 25, "Print"],
+Cell[42708, 1304, 48, 1, 25, "Print"],
+Cell[42759, 1307, 81, 1, 25, "Print"],
+Cell[42843, 1310, 45, 1, 25, "Print"],
+Cell[42891, 1313, 766, 21, 25, "Print"],
+Cell[43660, 1336, 51, 1, 25, "Print"],
+Cell[43714, 1339, 34, 1, 25, "Print"],
+Cell[43751, 1342, 64, 1, 25, "Print"],
+Cell[43818, 1345, 114, 2, 25, "Print"],
+Cell[43935, 1349, 77, 1, 25, "Print"],
+Cell[44015, 1352, 143, 3, 25, "Print"],
+Cell[44161, 1357, 47, 1, 25, "Print"],
+Cell[44211, 1360, 227, 3, 25, "Print"],
+Cell[44441, 1365, 48, 1, 25, "Print"],
+Cell[44492, 1368, 81, 1, 25, "Print"],
+Cell[44576, 1371, 45, 1, 25, "Print"],
+Cell[44624, 1374, 1484, 41, 25, "Print"],
+Cell[46111, 1417, 51, 1, 25, "Print"],
+Cell[46165, 1420, 34, 1, 25, "Print"],
+Cell[46202, 1423, 64, 1, 25, "Print"],
+Cell[46269, 1426, 124, 2, 25, "Print"],
+Cell[46396, 1430, 77, 1, 25, "Print"],
+Cell[46476, 1433, 143, 3, 25, "Print"],
+Cell[46622, 1438, 47, 1, 25, "Print"],
+Cell[46672, 1441, 227, 3, 25, "Print"],
+Cell[46902, 1446, 48, 1, 25, "Print"],
+Cell[46953, 1449, 81, 1, 25, "Print"],
+Cell[47037, 1452, 45, 1, 25, "Print"],
+Cell[47085, 1455, 627, 17, 25, "Print"],
+Cell[47715, 1474, 51, 1, 25, "Print"],
+Cell[47769, 1477, 34, 1, 25, "Print"],
+Cell[47806, 1480, 64, 1, 25, "Print"],
+Cell[47873, 1483, 114, 2, 25, "Print"],
+Cell[47990, 1487, 77, 1, 25, "Print"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
