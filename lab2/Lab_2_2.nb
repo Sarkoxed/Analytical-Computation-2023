@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[    106100,       2043]*)
-(*NotebookOutlinePosition[    106766,       2066]*)
-(*  CellTagsIndexPosition[    106722,       2062]*)
+(*NotebookOptionsPosition[     48177,       1306]*)
+(*NotebookOutlinePosition[     48842,       1329]*)
+(*  CellTagsIndexPosition[     48798,       1325]*)
 (*WindowFrame->Normal*)
 
 
@@ -114,16 +114,20 @@ Cell[BoxData[{
 Cell[CellGroupData[{
 
 Cell[BoxData[
-    \(\(\(\(A1\  = \ {{1, \ 0, \ 0, \ 1}, \ {1, \ 0, \ 1, \ 1}, \ {1, \ 1, \ 
+    \(\(\(\(A1\  = \ {{1, \ 1, \ 0, \ 0}, \ {1, \ 0, \ 1, 1}, \ {1, \ 1, \ 
             1, \ 0}, \ {1, \ 0, \ 1, \ 0}};\)\[IndentingNewLine]
-    \(\(B1\  = \ {1, \ 1, \ 0, \ 1};\)\(\[IndentingNewLine]\)
+    \(\(B1\  = \ {0, \ 1, \ 0, \ 1};\)\(\[IndentingNewLine]\)
     \)\[IndentingNewLine]
     \(generalrelation\  = \ LFSR[A1, \ 4];\)\[IndentingNewLine]
     CharPoly[A1, \ 4]\[IndentingNewLine]
+    Factor[CharPoly[A1, \ 4], \ Modulus \[Rule] \ 2]\[IndentingNewLine]
     \(PrintLFSR[generalrelation, \ 4];\)\)\(\ \)\)\)], "Input"],
 
 Cell[BoxData[
-    \(1 + x\^2 + x\^4\)], "Output"],
+    \(1 + x + x\^2 + x\^4\)], "Output"],
+
+Cell[BoxData[
+    \(\((1 + x)\)\ \((1 + x\^2 + x\^3)\)\)], "Output"],
 
 Cell[BoxData[
     InterpretationBox[
@@ -137,6 +141,10 @@ Cell[BoxData[
           InterpretationBox["\<\"x[m]\"\>",
             StringForm[ "x[``]", "m"],
             Editable->False], "+", 
+          InterpretationBox["\<\"x[\\!\\(1 + \\\"m\\\"\\)]\"\>",
+            StringForm[ "x[``]", 
+              Plus[ 1, "m"]],
+            Editable->False], "+", 
           InterpretationBox["\<\"x[\\!\\(2 + \\\"m\\\"\\)]\"\>",
             StringForm[ "x[``]", 
               Plus[ 2, "m"]],
@@ -147,6 +155,8 @@ Cell[BoxData[
         Plus[ 
           StringForm[ "x[``]", "m"], 
           StringForm[ "x[``]", 
+            Plus[ 1, "m"]], 
+          StringForm[ "x[``]", 
             Plus[ 2, "m"]]]],
       Editable->False]], "Print"]
 }, Open  ]],
@@ -154,31 +164,124 @@ Cell[BoxData[
 Cell[CellGroupData[{
 
 Cell[BoxData[{
-    \(\(C1\  = \ {0, \ 1, \ 1, \ 0};\)\), "\[IndentingNewLine]", 
+    \(\(C1\  = \ {1, \ 1, \ 1, \ 1};\)\), "\[IndentingNewLine]", 
     \(Table[getn[A1, \ B1, \ C1, \ i], \ {i, \ 0, \ 11}]\)}], "Input"],
 
 Cell[BoxData[
-    \({1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1}\)], "Output"]
+    \({0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1}\)], "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
     \(Table[
-      LFSRgetn[generalrelation, \ {0, \ 1, 1, 1}, \ 4, \ i], \ {i, \ 1, \ 
+      LFSRgetn[generalrelation, \ {1, 1, 0, 0}, \ 4, \ i], \ {i, \ 1, \ 
         12}]\)], "Input"],
 
 Cell[BoxData[
-    \({1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1}\)], "Output"]
+    \({0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[GeneratingFunction];\)\), "\[IndentingNewLine]", 
+    \(\(GeneratingFunction[A_, \ B_, \ s0_, \ chp_, \ 
+          n_]\  := \[IndentingNewLine]Module[{Sp}, \[IndentingNewLine]coeffs\ \
+ = \ Reverse[
+              CoefficientList[chp, \ 
+                x]]; \[IndentingNewLine]Ps\  = \ {}; \[IndentingNewLine]For[
+            i\  = \ 0, \ 
+            i\  <= \ n - 1, \ \(i++\), \[IndentingNewLine]tmp\  = \ 
+              Reverse[Take[s0, \ i\  + \ 1]]; \[IndentingNewLine]tmprel\  = \ 
+              Take[coeffs, \ i\  + \ 1]; \[IndentingNewLine]res\  = \ 
+              Mod[tmp . tmprel, \ 2]; \[IndentingNewLine]Ps\  = \ 
+              Append[Ps, \ 
+                res];\[IndentingNewLine]]; \[IndentingNewLine]P\  = \ 
+            x^Range[0, \ n - 1] . Reverse[Ps]; \[IndentingNewLine]Q\  = \ 
+            PolynomialMod[chp, \ 2]; \[IndentingNewLine]G\  = \ 
+            Factor[P/Q, \ 
+              Modulus \[Rule] 
+                2]; \[IndentingNewLine]G\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(CharPoly[A1, \ 4]\), "\[IndentingNewLine]", 
+    \(\(H1\  = \ 
+        A1\  - \ IdentityMatrix[4]\ *\ x;\)\), "\[IndentingNewLine]", 
+    \(\(H1\  = \ PolynomialMod[Inverse[H1], \ 2];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(1 + x + x\^2 + x\^4\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(S1\  = \ {1, \ 0, \ 1, \ 1};\)\), "\[IndentingNewLine]", 
+    \(\(Qx\  = \ 
+        Factor[PolynomialMod[B1 . H1 . S1, \ 2], \ 
+          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
+    \(\(state0\  = \ 
+        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, 
+            3}];\)\), "\[IndentingNewLine]", 
+    \(\(G\  = 
+        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+          4];\)\), "\[IndentingNewLine]", 
+    \(Qx\  \[Equal] \ G\)}], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(S1\  = \ {0, \ 0, \ 0, \ 1};\)\), "\[IndentingNewLine]", 
+    \(\(Qx\  = \ 
+        Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
+          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
+    \(\(state0\  = \ 
+        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
+            3}];\)\), "\[IndentingNewLine]", 
+    \(\(G\  = 
+        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+          4];\)\), "\[IndentingNewLine]", 
+    \(G\  \[Equal] \ Qx\)}], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(S1\  = \ {0, \ 0, 1, \ 1};\)\), "\[IndentingNewLine]", 
+    \(\(PolynomialMod[B1 . Minors[A1 - \ IdentityMatrix[4]\ *\ x] . S1, \ 
+        2];\)\), "\[IndentingNewLine]", 
+    \(\(Qx\  = \ 
+        Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
+          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
+    \(\(state0\  = \ 
+        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
+            3}];\)\), "\[IndentingNewLine]", 
+    \(\(G\  = \ 
+        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+          4];\)\), "\[IndentingNewLine]", 
+    \(G\  \[Equal] \ Qx\)}], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
-    \(Factor[CharPoly[A1, \ 4], \ Modulus\  \[Rule] \ 2]\)], "Input"],
+    \(GetCycles[A1, \ B1, \ 4]\)], "Input"],
 
 Cell[BoxData[
-    \(\((1 + x + x\^2)\)\^2\)], "Output"]
+    \({{1, 2, {1, 1 + x}}, {7, 
+        14, {\((1 + x)\)\ \((1 + x\^2 + x\^3)\), 
+          1 + x\^2 + x\^3}}}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -231,8 +334,8 @@ Cell[BoxData[{
     \(\(Mpow[A_, \ n_, \ 
           k_]\  := \[IndentingNewLine]Module[{i, \ tmp, \ 
             bin}, \[IndentingNewLine]tmp\  = \ 
-            A; \[IndentingNewLine]bin\  = \ 
-            IntegerDigits[k, \ 2]; \[IndentingNewLine]For[i\ \  = \ 2, \ 
+            IdentityMatrix[n]; \[IndentingNewLine]bin\  = \ 
+            IntegerDigits[k, \ 2]; \[IndentingNewLine]For[i\ \  = \ 1, \ 
             i\  <= \ Length[bin], \ \(i++\), \[IndentingNewLine]tmp\  = \ 
               Mod[tmp . tmp, \ 2]; \[IndentingNewLine]If[
               bin[\([i]\)]\  \[Equal] \ 
@@ -241,27 +344,8 @@ Cell[BoxData[{
                     2];\)\[IndentingNewLine]];\[IndentingNewLine]\
 \[IndentingNewLine]]; \[IndentingNewLine]tmp\[IndentingNewLine]];\)\
 \[IndentingNewLine]\[IndentingNewLine]\), "\[IndentingNewLine]", 
-    \(\(ClearAll[getChar];\)\), "\[IndentingNewLine]", 
-    \(\(getChar[A_, \ B_, \ s0_, \ chp_, \ 
-          n_]\  := \[IndentingNewLine]Module[{Sp}, \[IndentingNewLine]coeffs\ \
- = \ Take[Reverse[CoefficientList[chp, \ x]], \ 
-              n]; \[IndentingNewLine]Ps\  = \ {}; \[IndentingNewLine]For[
-            i\  = \ 0, \ 
-            i\  < \ n, \ \(i++\), \[IndentingNewLine]tmp\  = \ 
-              Reverse[Take[s0, \ i\  + \ 1]]; \[IndentingNewLine]tmpr\  = \ 
-              Take[Reverse[coeffs], \ 
-                i\  + \ 1]; \[IndentingNewLine]res\  = \ 
-              Mod[tmp . tmpr, \ 2]; \[IndentingNewLine]Ps\  = \ 
-              Append[Ps, \ 
-                res];\[IndentingNewLine]]; \[IndentingNewLine]f4\  = \ 
-            x^Range[0, \ n - 1] . Ps; \[IndentingNewLine]f5\  = \ 
-            PolynomialMod[chp, \ 2]; \[IndentingNewLine]f\  = \ 
-            Factor[f4/f5, \ 
-              Modulus \[Rule] 2]; \[IndentingNewLine]Denominator[
-            f]\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
-\[IndentingNewLine]", 
     \(\(ClearAll[GetCycles];\)\), "\[IndentingNewLine]", 
-    \(\(GetCycles[A_, \ B_, \ 
+    \(\(\(GetCycles[A_, \ B_, \ 
           n_]\  := \[IndentingNewLine]Module[\[IndentingNewLine]{state, \ 
             stateinit, \ 
             statematrices, \ \[IndentingNewLine]matrpows, \ \ statematrix, \ 
@@ -283,9 +367,14 @@ Cell[BoxData[{
             i\  = \ 0, \ 
             i\  < \ 2^n, \ \(i++\), \[IndentingNewLine]stateinit\  = \ 
               IntegerDigits[i, \ 2, \ 
-                n]; \[IndentingNewLine]\[IndentingNewLine]\[IndentingNewLine]\
-gf\  = \ getChar[A, \ B, \ stateinit, \ 
-                charp]; \[IndentingNewLine]\[IndentingNewLine]If[
+                n]; \[IndentingNewLine]\[IndentingNewLine]init\  = \ 
+              Table[Mod[B . matrpows[\([k]\)] . stateinit, \ 2], \ {k, \ 
+                  n}]; \[IndentingNewLine]\[IndentingNewLine]gf\  = \ 
+              GeneratingFunction[A, \ B, \ init, \ charp, \ 
+                n]; \[IndentingNewLine]gf\  = \ 
+              Factor[Denominator[gf], \ 
+                Modulus \[Rule] \ 
+                  2]; \[IndentingNewLine]\[IndentingNewLine]If[
               gf\  \[Equal] \ 
                 1, \[IndentingNewLine]allstates[\([1, \ 2]\)]\  += \ 
                 1; \[IndentingNewLine]allstates[\([1, \ 
@@ -307,20 +396,18 @@ gf\  = \ getChar[A, \ B, \ stateinit, \
 \[IndentingNewLine]]; \[IndentingNewLine]If[
               flag\  \[Equal] \ 
                 1, \[IndentingNewLine]\(Continue[];\)\[IndentingNewLine]]; \
-\[IndentingNewLine]\[IndentingNewLine]\[IndentingNewLine]m\  = \ 
+\[IndentingNewLine]\[IndentingNewLine]m\  = \ 
               Length[CoefficientList[gf, \ x]] - \ 
                 1; \[IndentingNewLine]init\  = \ 
-              Table[\[IndentingNewLine]Mod[\((B . matrpows[\([k]\)])\) . 
-                    stateinit, \ 2], \[IndentingNewLine]{k, \ 
-                  m}\[IndentingNewLine]]; \[IndentingNewLine]order\  = \ 
+              Take[init, \ 
+                m]; \[IndentingNewLine]\[IndentingNewLine]order\  = \ 
               orderpoly[gf]; \[IndentingNewLine]orders\  = \ 
               Divisors[order]; \[IndentingNewLine]\[IndentingNewLine]For[
               j\  = \ 1, \ 
               j\  \[LessEqual] \ 
-                Length[
-                  orders], \ \(j++\), \
-\[IndentingNewLine]\[IndentingNewLine]order\  = \ 
-                orders[\([j]\)]; \[IndentingNewLine]For[k\  = 1, \ 
+                Length[orders], \ \(j++\), \[IndentingNewLine]\
+\[IndentingNewLine]order\  = \ orders[\([j]\)]; \[IndentingNewLine]For[
+                k\  = 1, \ 
                 k\  \[LessEqual] \ 
                   Length[statematrices], \ \(k++\), \[IndentingNewLine]\(If[
                     statematrices[\([k, 1]\)]\  \[Equal] \ 
@@ -328,14 +415,14 @@ gf\  = \ getChar[A, \ B, \ stateinit, \
                       statematrices[\([k, \ 
                           2]\)]; \[IndentingNewLine]Break[];\
 \[IndentingNewLine]];\)\[IndentingNewLine]]; \[IndentingNewLine]\
-\[IndentingNewLine]state\  = \ \ Table[\[IndentingNewLine]Mod[\((B . \
-\((matrpows[\([k]\)] . statematrix)\))\) . stateinit, \ 
+\[IndentingNewLine]state\  = \ \ Table[\[IndentingNewLine]Mod[
+                    B . matrpows[\([k]\)] . statematrix . stateinit, \ 
                     2], \[IndentingNewLine]{k, \ 
                     m}\[IndentingNewLine]]; \[IndentingNewLine]\
 \[IndentingNewLine]flag\  = \ 0; \[IndentingNewLine]If[
                 init\  \[Equal] \ state, \[IndentingNewLine]For[k\  = \ 1, \ 
-                  k\  <= \ Length[
-                      allstates], \ \(k++\), \[IndentingNewLine]\(If[
+                  k\  <= \ 
+                    Length[allstates], \ \(k++\), \[IndentingNewLine]\(If[
                       allstates[\([k, \ 1]\)]\  \[Equal] \ 
                         order, \[IndentingNewLine]allstates[\([k, \ 2]\)]\  += 
                         1; \[IndentingNewLine]allstates[\([k, \ 3]\)]\  = \ 
@@ -346,12 +433,12 @@ gf\  = \ getChar[A, \ B, \ stateinit, \
                   flag\  \[Equal] \ 
                     1, \ \[IndentingNewLine]\(Break[];\)\[IndentingNewLine]];\
 \[IndentingNewLine]];\[IndentingNewLine]];\[IndentingNewLine]]; \
-\[IndentingNewLine]allstates\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
-\[IndentingNewLine]", 
+\[IndentingNewLine]allstates\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
     \(\(ClearAll[LinAutAn];\)\), "\[IndentingNewLine]", 
-    \(\(LinAutAn[A_, \ B_, \ n_, \ 
-          Ainverse_]\  := \ \[IndentingNewLine]Module[{i, \ tmp, \ lf, \ 
-            chp, \ cycles, \ x, \ y, \ z, \ 
+    \(\(LinAutAn[A_, \ B_, \ 
+          n_]\  := \ \[IndentingNewLine]Module[{i, \ tmp, \ lf, \ chp, \ 
+            cycles, \ x, \ y, \ z, \ 
             allelements}, \[IndentingNewLine]lf\  = \ 
             LFSR[A, \ 
               n]; \[IndentingNewLine]Print["\<General Relation: \>"]; \
@@ -363,8 +450,8 @@ gf\  = \ getChar[A, \ B, \ stateinit, \
             Factor[chp, \ 
               Modulus\  \[Rule] \ 
                 2]]; \[IndentingNewLine]\[IndentingNewLine]cycles\  = \ 
-            GetCycles[A, \ B, \ n, \ 
-              Ainverse]; \[IndentingNewLine]Print["\<Cycle structure: \>"]; \
+            GetCycles[A, \ B, \ 
+              n]; \[IndentingNewLine]Print["\<Cycle structure: \>"]; \
 \[IndentingNewLine]allelements\  = \ 0; \[IndentingNewLine]For[i\  = \ 1, \ 
             i\  \[LessEqual] \ 
               Length[cycles], \ \(i++\), \[IndentingNewLine]x\  = \ 
@@ -377,9 +464,9 @@ gf\  = \ getChar[A, \ B, \ stateinit, \
 \[IndentingNewLine]Print["\<Period: \>", \ 
               x]; \[IndentingNewLine]Print["\<Number of cycles:  \>", \ 
               y\ /\ x]; \[IndentingNewLine]Print["\<CharPolyS: \>", \ 
-              Counted[z]]; \
-\[IndentingNewLine]Print["\<-----------------------\>"];\[IndentingNewLine]]; \
-\[IndentingNewLine]Print[
+              Counted[
+                z]]; \[IndentingNewLine]Print["\<-----------------------\>"];\
+\[IndentingNewLine]]; \[IndentingNewLine]Print[
             allelements\  \[Equal] \ 2^n];\[IndentingNewLine]];\)\)}], "Input"],
 
 Cell[BoxData[{
@@ -519,12 +606,10 @@ Cell[BoxData[
     \(True\)], "Output"]
 }, Open  ]],
 
-Cell[BoxData[""], "Input"],
-
 Cell[CellGroupData[{
 
 Cell[BoxData[
-    \(LinAutAn[A1, \ B1, \ n, \ Ainv]\)], "Input"],
+    \(LinAutAn[A1, \ B1, \ n]\)], "Input"],
 
 Cell[BoxData[
     \("General Relation: "\)], "Print"],
@@ -901,837 +986,15 @@ Cell[BoxData[{
               1}};\),
       FormatType->StandardForm,
       FontSize->14], "\n", 
-    StyleBox[\(\(B18 = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 
-            1};\)\(\n\)\),
+    StyleBox[\(B18 = {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 
+            1};\),
       FormatType->StandardForm,
-      FontSize->14], "\n", 
-    StyleBox[\(Factor[CharPoly[A18, \ 19], \ Modulus \[Rule] 2];\),
-      FormatType->StandardForm,
-      FontSize->14], "\[IndentingNewLine]", 
-    RowBox[{
-      RowBox[{
-        StyleBox["Ainv18",
-          FormatType->StandardForm,
-          FontSize->14], 
-        StyleBox[" ",
-          FormatType->StandardForm,
-          FontSize->14], 
-        StyleBox["=",
-          FormatType->StandardForm,
-          FontSize->14], 
-        StyleBox[" ",
-          FormatType->StandardForm,
-          
-          FontSize->
-            14], \({{\((x^17 + x^15 + x^12 + x^10 + x^9 + x^8 + x^7 + x^6 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^11 + x^6 + x^5 + 
-                  x^4 + x^2 + x + 1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + 
-                  x^15 + x^13 + x^12 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^8 + x^7 + x^6 + x^2)\)/\((x^10 + x^9 + x^8 + 
-                  x^7 + x^6 + x^5 + 1)\), \((x^16 + x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^5 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + 
-                  x^16 + x^15 + x^14 + x^12 + x^11 + x^8 + x^6 + x^3 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^15 + x^14 + 
-                  x^13 + x^11 + x^9 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^11 + x^9 + 
-                  x^8 + x^6 + x^3 + x^2 + 1)\)/\((x^13 + x^12 + x^11 + x^10 + 
-                  x^9 + x^8 + x^7 + x^4 + x + 1)\), \((x^15 + x^13 + x^11 + 
-                  x^8 + x^7 + x^6 + x^5 + x^3 + x^2)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^16 + x^12 + x^6 + x)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^15 + x^11 + x^10 + x^9 + x^6 + x^3 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^15 + x^14 + x^9 + x^8 + x^7 + 
-                  x^5 + x^2 + x)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^17 + 
-                  x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^15 + x^12 + x^8 + 
-                  x^7 + x^5 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + x^12 + x^8 + 
-                  x^7 + x^6 + x^5 + x^2 + x + 1)\)/\((x^15 + x^9 + x^8 + 
-                  x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^17 + x^16 + 
-                  x^15 + x^14 + x^12 + x^8 + x^7 + x^3 + 1)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\), \((x^17 + x^15 + x^14 + x^12 + x^6 + x^5 + 
-                  x^3 + x^2 + x)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + 
-                  x^14 + x^13 + x^12 + x^10 + x^9 + x^8 + x^5 + x^3 + x^2 + 
-                  x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^16 + x^12 + x^9 + x^8 + 
-                  x^5 + x^4 + x + 1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\)}, {\((x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^3 + x^2)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^16 + x^15 + x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^7 + x^6 + x^3 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^15 + x^14 + x^12 + x^10 + x^9 + x^8 + x^6 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^8 + x^4 + x^3 + 1)\)/\((x^10 + 
-                  x^9 + x^8 + x^7 + x^6 + x^5 + 1)\), \((x^16 + x^11 + x^10 + 
-                  x^8 + x^5 + x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + 
-                  x^13 + x^10 + x^7 + x^6 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^14 + x^11 + x^10)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^10 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 
-                  1)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^16 + x^14 + x^13 + x^12 + x^10 + x^9 + x^6 + 
-                  x^5 + x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + 
-                  x^13 + x^11 + x^5 + x^4 + x^3 + x + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^11 + x^10 + x^9 + x^8 + x^6 + x^4 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^13 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^5 + x^4 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^11 + 
-                  x^10 + x^9 + x^7 + x^4 + x^2 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^12 + x^11 + x^9 + x^6 + x^5 + x^4 + x^3 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^10 + x^9 + x^7 + x^4 + x^2 + x + 
-                  1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^15 + x^13 + x^8 + x^5 + x^4 + 
-                  x^3 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^12 + x^11 + x^10 + 
-                  x^9 + x^7 + x^6 + x^5 + x^4 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^13 + x^12 + x^11 + x^8 + x^6)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + 
-                  x^13 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\)}, {\((x^16 + x^15 + x^12 + x^6 + x^5 + x^4 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^11 + x^10 + x^9 + 
-                  x^6 + x^5 + x^4 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + x^15 + 
-                  x^14 + x^10 + x^8 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^7 + x^5 + 
-                  x^2)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^16 + x^15 + x^14 + x^11 + x^5 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^14 + x^13 + x^12 + x^11 + x^9 + 
-                  x^8 + x^6 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^13 + x^12 + 
-                  x^10 + x^6 + x^5 + x)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^3 + 
-                  x)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^16 + x^14 + x^13 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^11 + x^10 + x^9 + 
-                  x^8 + x^7 + x^3 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + 
-                  x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^11 + x^9 + x^7 + x^6 + 
-                  x^4 + x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^13 + x^12 + 
-                  x^11 + x^10 + x^7 + x^6 + x^5 + x^4 + x^2 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^13 + x^9 + x^8 + x^5 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x + 
-                  1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^16 + x^12 + x^11 + x^9 + x^8 + 
-                  x^5 + x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^9 + x^7 + 
-                  x^5 + x^3 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^12 + x^8 + 
-                  x^7 + x^6 + x^5 + x^3 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + 
-                  x^14 + x^13 + x^12 + x^8 + x^4 + x^3 + x^2 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\)}, {\((x^13 + x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^10 + x^9 + x^4 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^13 + x^12 + x^10 + x^9 + x^8 + 
-                  x^7 + x^6 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^9 + x^6 + x^5 + 
-                  x^2)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^14 + x^13 + x^12 + x^11 + x^9 + x^7 + x^5 + 
-                  x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^13 + x^10 + 
-                  x^9 + x^7 + x^5 + x^4 + x^2 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + 
-                  x^12 + x^10 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^8 + x^7 + x^6 + x + 
-                  1)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^15 + x^14 + x^11 + x^8 + x^7 + x^5 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^10 + x^7 + x^3 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + 
-                  x^8 + x^6 + x^5 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + 
-                  x^13 + x^10 + x^8 + x^5 + x^4)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^13 + x^12 + x^11 + x^10 + x^8 + x^4 + x)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^13 + x^12 + x^9 + x^6 + 
-                  x^3 + x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^10 + x^9 + x^7 + x^5 + 
-                  x^2 + x)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + 
-                  x^7 + x^6 + x^4 + x^2 + 1)\), \((x^16 + x^15 + x^8 + x^7 + 
-                  x^6 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^11 + 
-                  x^8 + x^7 + x^6 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^14 + x^13 + x^12 + x^8 + x^4 + x^2 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^14 + x^13 + x^9 + x^7 + x^6 + x^5 + x^3 + 
-                  x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\)}, {\((x^16 + x^15 + x^14 + 
-                  x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^13 + x^6 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^15 + x^14 + x^9 + 
-                  x^6 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^8 + x^7 + x^6 + x^5 + 
-                  x^3 + x^2 + 1)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^17 + x^16 + x^13 + x^11 + x^10 + x^7 + x^5 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^14 + x^13 + x^12 + x^10 + x^8 + 
-                  x^6 + x^5 + x^3 + x^2 + x)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^15 + x^14 + x^12 + x^10 + x^6 + x^5 + 
-                  x^3 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^9 + x^5 + x^4 + x + 
-                  1)\)/\((x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + 
-                  x + 1)\), \((x^16 + x^15 + x^14 + x^10 + x^6 + 
-                  x^5)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^16 + x^15 + x^14 + x^13 + 
-                  x^11 + x^9 + x^6 + x^4 + x^3 + x^2)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^15 + x^14 + x^12 + x^9 + x^8 + x^7 + 
-                  x^6)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^15 + x^9 + x^8 + x^7 + x^6 + 
-                  x^5 + x^2)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + 
-                  x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^15 + x^10 + x^7 + 
-                  x^4 + x^3 + x^2 + 1)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^13 + x^12 + x^10 + x^8 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^12 + x^11 + x^10 + x^9 + x^7 + x^2 + 
-                  1)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 
-                  x + 1)\), \((x^17 + x^14 + x^11 + x^10 + x^9 + x^8 + x^7 + 
-                  x^6 + x^5)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + 
-                  x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^15 + 
-                  x^14 + x^6 + x^5 + x^2 + 1)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^14 + x^13 + x^12 + x^5 + x^4 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^8 + x^5 + x^4 + x^2 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\)}, {\((x^16 + x^14 + x^13 + 
-                  x^10 + x^8 + x^6 + x^4 + x^2 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + 
-                  x^11 + x^10 + x^9 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + 
-                  x^12 + x^11 + x^10 + x^8 + x^7 + x^6 + x^5 + x^3 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^3 + x^2 + x)\)/\((x^10 + x^9 + x^8 + 
-                  x^7 + x^6 + x^5 + 1)\), \((x^15 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^17 + x^15 + x^14 + x^11 + 
-                  x^8 + x^7 + x^5 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^12 + x^10 + 
-                  x^7 + x^5 + x^4 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^8 + x^5 + 
-                  x^2 + x)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^14 + x^12 + x^8 + x^4 + x^2 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^13 + x^12 + x^9 + x^7 + x^6 + x^5 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^14 + x^12 + x^10 + x^8 + x^7 + 
-                  x^6 + x^5 + x^4 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + 
-                  x^12 + x^10 + x^8 + x^7 + x^5 + x^3 + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^13 + x^8 + x^5 + x^4 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^14 + x^12 + x^10 + x^9 + x^5 + x^3 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^11 + x^7 + x^5 + x^3 + x^2 + 
-                  x)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^13 + x^11 + x^10 + x^8 + x^7 + 
-                  x^6 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^11 + x^10 + 
-                  x^8 + x^7 + x^6 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^8 + 
-                  x^6 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^13 + x^11 + 
-                  x^9 + x^8 + x^3 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^16 + 
-                  x^15 + x^11 + x^10 + x^8 + x^6 + x^4 + x^3 + x^2 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^13 + x^11 + x^9 + 
-                  x^7 + x^5 + x^4 + x^3 + x^2 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^5 + 
-                  x^4 + x^2 + 1)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^15 + x^11 + x^8 + x^7 + x^5 + x^4 + x^3 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^13 + x^10 + x^7 + x^5 + x^4 + 
-                  x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^16 + x^14 + x^13 + x^11 + 
-                  x^10 + x^9 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^10 + x^6 + 
-                  x^4)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^16 + x^15 + x^13 + x^12 + x^10 + x^9 + x^6 + 
-                  x^4 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^10 + x^9 + x^5 + 
-                  x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^13 + x^10 + x^9 + 
-                  x^8 + x^6 + x^5 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + 
-                  x^10 + x^5 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^11 + x^8 + 
-                  x^6 + x^4 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + x^12 + x^11 + 
-                  x^9 + x^8 + x^7 + x^5 + x^2)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^12 + 
-                  x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x^3 + x^2 + 
-                  x)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^13 + x^12 + x^9 + x^3 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^15 + x^10 + x^4 + x^3 + x^2 + 
-                  x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^11 + x^10 + x^6 + 
-                  x^5)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^15 + x^13 + x^11 + x^10 + x^9 + 
-                  x^7 + x^6 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^16 + x^15 + 
-                  x^12 + x^11 + x^9 + x^8 + x^6 + x^5 + x^2 + x)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^13 + x^12 + x^9 + x^7 + x^5 + 
-                  x^4 + x^3)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + 
-                  x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^15 + x^12 + 
-                  x^10 + x^5 + x^3 + x^2 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^7 + 
-                  x^6 + x^5 + x^4 + x^2 + x)\)/\((x^10 + x^9 + x^8 + x^7 + 
-                  x^6 + x^5 + 1)\), \((x^16 + x^15 + x^13 + x^12 + x^11 + 
-                  x^9 + x^6 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^13 + 
-                  x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^5 + x^2 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^14 + x^10 + x^9 + x^6 + 
-                  x^5 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^12 + x^9 + x^5 + x^4 + 
-                  x^3 + x + 1)\)/\((x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + 
-                  x^7 + x^4 + x + 1)\), \((x^14 + x^13 + x^12 + x^11 + x^5 + 
-                  x^3 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^13 + x^12 + x^11 + 
-                  x^9 + x^7 + x^6 + x^4 + x)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^15 + x^12 + x^11 + x^10 + x^8 + x^6 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^15 + x^14 + x^11 + x^8 + x^6 + x^5 + 
-                  x^4 + x^3 + x^2)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + 
-                  x^15 + x^14 + x^10 + x^8 + x^4 + x^2 + x + 1)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\), \((x^13 + x^12 + x^10 + x^8 + x^7 + x^3 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^13 + x^12 + x^10 + x^7 + x^6 + x^4 + 
-                  x^2 + x + 1)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3 + x^2 + x + 1)\), \((x^16 + x^15 + x^14 + x^13 + x^11 + 
-                  x^8 + x^7 + x^6 + x^3 + x^2 + x)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^17 + x^16 + x^15 + x^14 + x^13 + x^12 + x^11 + 
-                  x^9 + x^6 + x^5 + x)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^15 + x^14 + x^13 + x^11 + x^10 + x^9 + x^8 + 
-                  x^6 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + x^14 + x^12 + 
-                  x^10 + x^9 + x^7 + x^6 + x^3 + x^2)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\)}, {\((x^14 + x^12 + x^10 + x^8 + x^7 + x^6 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^15 + x^11 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^13 + 
-                  x^11 + x^10 + x^9 + x^8 + x^4 + x^3 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^7 + x^5 + x^3 + x + 1)\)/\((x^10 + x^9 + x^8 + 
-                  x^7 + x^6 + x^5 + 1)\), \((x^14 + x^11 + x^10 + x^5 + x^4 + 
-                  x^3 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^9 + x^7 + x^6 + 
-                  x^4 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^7 + x^5 + 
-                  x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^10 + x^8 + x^7 + x^6 + 
-                  x^5 + 1)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^17 + x^16 + x^15 + x^7 + x^6 + x^5 + x^3 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^15 + x^14 + x^8 + x^6 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^10 + x^9 + x^6 + 
-                  x^3 + x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^12 + x^10 + 
-                  x^9 + x^7 + x^6 + x^5 + x^4 + x^2 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^13 + x^12 + x^6 + x^4 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^14 + x^11 + x^10 + x^9 + x^8 + x^6 + 
-                  x^4 + x^3 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^9 + x^6 + x^3 + 
-                  x^2 + x)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + 
-                  x^7 + x^6 + x^4 + x^2 + 1)\), \((x^14 + x^13 + x^11 + x^9 + 
-                  x^5 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^13 + x^10 + 
-                  x^8 + x^6 + x^4 + x^3 + x^2 + x + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^13 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^12 + x^8 + x^7 + 
-                  x^6 + x^4 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^7 + x^3 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + 
-                  x^13 + x^7 + x^6 + x^5 + x^4 + x^3)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^14 + x^11 + x^10 + x^6 + x^5 + x^4 + x^3 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^5 + x^4 + x^3 + x^2 + 1)\)/\((x^10 + 
-                  x^9 + x^8 + x^7 + x^6 + x^5 + 1)\), \((x^12 + x^11 + x^10 + 
-                  x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^13 + x^12 + x^11 + x^10 + x^8 + 
-                  x^5 + x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^12 + 
-                  x^10 + x^8 + x^7 + x^6 + x^4 + x^3 + x^2)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x)\)/\((x^12 + 
-                  x^10 + x^8 + x^6 + x^5 + x^4 + 1)\), \((x^14 + x^12 + 
-                  x^11 + x^9 + x^7 + x^5 + x^4 + x^2 + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^13 + x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + 
-                  x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^10 + x^7 + 
-                  x^5 + x^4 + x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + 
-                  x^13 + x^11 + x^10 + x^8 + x^6)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + 
-                  x^12 + x^11 + x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^15 + x^13 + x^9 + x^6 + 
-                  x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^12 + x^9 + x^8 + x^7 + x^6 + 
-                  x^2)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^16 + x^15 + x^10 + x^8 + x^6 + 
-                  x^5 + x^3 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^11 + x^6 + 
-                  x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^13 + x^6 + x^2 + 
-                  x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^11 + x^9 + x^8 + 
-                  x^7 + x^3 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^12 + x^11 + x^10 + 
-                  x^7 + x^5 + x^4 + x^2 + 1)\)/\((x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^12 + x^11 + 
-                  x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 1)\)/\((x^15 + x^9 + 
-                  x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^12 + 
-                  x^11 + x^10 + x^9 + x^8 + x^6 + x^4)\)/\((x^14 + x^13 + 
-                  x^12 + x^11 + x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 
-                  1)\), \((x^4 + 1)\)/\((x^6 + x + 1)\), \((x^12 + x^11 + 
-                  x^7 + x^4 + x^2 + 1)\)/\((x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^10 + x^9 + 
-                  x^8 + x^6 + x^5 + x^3 + 1)\)/\((x^15 + x^9 + x^8 + x^6 + 
-                  x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^12 + x^10 + x^9 + 
-                  x^5 + x^3)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + 
-                  x^7 + x^6 + x^4 + x^2 + 1)\), \((x^7 + x^6 + x^5 + x^4 + 
-                  1)\)/\((x^9 + x^4 + x^2 + 1)\), \((x^12 + x^10 + x^9 + 
-                  x^8 + x^6 + x^4 + x)\)/\((x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^12 + x^7 + 
-                  x^5 + x^3 + x^2 + x + 1)\)/\((x^15 + x^9 + x^8 + x^6 + 
-                  x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^13 + x^12 + x^10 + 
-                  x^8 + x^7 + x^6 + x^4 + x^2 + x)\)/\((x^14 + x^13 + x^12 + 
-                  x^11 + x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^13 + 
-                  x^12 + x^8 + x^6 + x^5 + x^2 + 1)\)/\((x^15 + x^9 + x^8 + 
-                  x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^13 + x^11 + 
-                  x^9 + x^3 + x^2)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3 + x^2 + x + 1)\), \((x^12 + x^6 + x^5 + x^3 + x^2 + 
-                  1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^13 + x^11 + x^10 + x^9 + x^7 + 
-                  x^5 + x)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + 
-                  x^2 + x + 1)\), \((x^13 + x^12 + x^11 + x^10 + x^8 + x^5 + 
-                  x^3 + x^2 + x)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3 + x^2 + x + 1)\), \((x^13 + x^12 + x^10 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x^3 + x + 1)\)/\((x^15 + x^9 + x^8 + 
-                  x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^12 + x^10 + 
-                  x^9 + x^5 + x^4 + x^2)\)/\((x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^11 + x^8 + 
-                  x^7 + x^6 + x^4 + x^3 + 1)\)/\((x^15 + x^9 + x^8 + x^6 + 
-                  x^5 + x^4 + x^3 + x^2 + x + 1)\)}, {\((x^12 + x^10 + x^9 + 
-                  x^8 + x^6 + x^5 + x^3 + x^2)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + 
-                  x^15 + x^14 + x^13 + x^12 + x^10 + x^8 + x^7 + x^6 + x^2 + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^13 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^3 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^8 + x^7 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\)/\((x^10 + x^9 + x^8 + x^7 + 
-                  x^6 + x^5 + 1)\), \((x^16 + x^13 + x^10 + x^9 + x^8 + x^7 + 
-                  x^6 + x^5 + x^4 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^15 + x^14 + x^13 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + 
-                  x^3 + x^2 + x)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + 
-                  x^13 + x^12 + x^9 + x^8 + x^7 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^8 + x^5 + x^4 + x + 1)\)/\((x^13 + x^12 + x^11 + 
-                  x^10 + x^9 + x^8 + x^7 + x^4 + x + 1)\), \((x^15 + x^13 + 
-                  x^12 + x^9 + x^8 + x^5 + x^4)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + 
-                  x^12 + x^11 + x^10 + x^8 + x^7 + x^4 + x^3 + x)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\), \((x^14 + x^11 + x^10 + x^9 + x^7 + x^4 + x^3 + 
-                  x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^18 + x^16 + x^15 + x^14 + x^13 + 
-                  x^12 + x^11 + x^10 + x^5 + x^4 + x)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^13 + x^9 + x^8 + x^5 + x + 1)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\), \((x^16 + x^15 + x^14 + x^12 + x^10 + x^9 + 
-                  x^5 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^13 + x^11 + x^9 + x^7 + 
-                  x^4 + x + 1)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + 
-                  x^3 + x^2 + x + 1)\), \((x^16 + x^15 + x^14 + x^10 + x^9 + 
-                  x^8 + x^6 + x^5 + x)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^17 + x^16 + x^15 + x^13 + x^12 + x^10 + x^9 + 
-                  x^5 + x^4 + x^2 + 1)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^14 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + 
-                  x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^15 + x^13 + x^11 + x^9 + 
-                  x^7 + x^5 + x^4 + x^3 + x^2 + x)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\)}, {\((x^16 + x^15 + x^11 + x^5 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^17 + x^16 + x^14 + x^13 + x^10 + 
-                  x^8 + x^4 + x^2 + 1)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^13 + x^11 + x^10 + x^9 + x^6 + x^5 + x^4 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^6 + x^5 + x^4 + x)\)/\((x^10 + x^9 + 
-                  x^8 + x^7 + x^6 + x^5 + 1)\), \((x^16 + x^12 + x^11 + x^7 + 
-                  x^6 + x^3 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + x^14 + x^11 + 
-                  x^10 + x^7 + x^6 + x^5 + x^2 + x)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^15 + x^13 + x^11 + x^9 + x^8 + x^4 + 
-                  x^3 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^8 + x^2 + x)\)/\((x^13 + 
-                  x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^13 + x^12 + x^11 + x^10 + 
-                  x^7 + x^6 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + x^14 + x^13 + 
-                  x^12 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + x)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\), \((x^16 + x^15 + x^14 + x^9 + x^6 + x^3 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^16 + x^15 + x^14 + x^10 + x^9 + 
-                  x^7 + x^6 + x^2)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + 
-                  x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^18 + 
-                  x^17 + x^15 + x^13 + x^11 + x^10 + x^6 + x^3 + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^10 + x^9 + x^4 + 
-                  x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^12 + x^8 + x^6 + x^3 + x^2 + x + 
-                  1)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 
-                  x + 1)\), \((x^13 + x^10 + x^9 + x^8 + x^7 + x^6 + x^3 + 
-                  x^2 + x)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + 
-                  x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^17 + x^16 + 
-                  x^15 + x^12 + x^11 + x^9 + x^8 + x^7 + x^6 + x^4 + x^2 + 
-                  x + 1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + 
-                  x^10 + x^6 + x^5 + x^4 + x^2 + 1)\), \((x^15 + x^14 + 
-                  x^11 + x^9 + x^7 + x^6 + x^4 + x^3 + x^2)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^15 + x^14 + x^13 + x^12 + x^11 + x^10 + 
-                  x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + x + 1)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\)}, {\((x^16 + x^14 + x^13 + x^11 + x^10 + x^9 + 
-                  x^6 + x^5 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^10 + x^3 + x^2 + 
-                  x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^13 + x^11 + x^9 + 
-                  x^7 + x^4 + x^3 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^6 + 
-                  x^5 + x^3 + x^2)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^16 + x^14 + x^12 + x^11 + x^9 + x^7 + x^5 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^14 + x^13 + x^12 + x^11 + 
-                  x^9 + x^8 + x^4 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + 
-                  x^12 + x^10 + x^9 + x^8 + x^7 + x^6 + x^2)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^10 + x^9 + x^8 + x + 1)\)/\((x^12 + x^10 + x^8 + 
-                  x^6 + x^5 + x^4 + 1)\), \((x^16 + x^15 + x^13 + x^11 + 
-                  x^10 + x^5 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x^3 + x^2 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^11 + x^10 + x^6 + x^5 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^12 + x^11 + x^10 + 
-                  x^9 + x^8 + x^6 + x^5 + x^2 + x + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^14 + x^5 + x^4 + x^3 + x^2 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^15 + x^14 + x^13 + x^12 + 
-                  x^11 + x^8 + x^6 + x^5 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^9 + 
-                  x^7 + x^4 + x + 1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + 
-                  x^9 + x^7 + x^6 + x^4 + x^2 + 1)\), \((x^15 + x^14 + x^13 + 
-                  x^9 + x^7 + x^5 + x^4 + x^3)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^14 + x^11 + x^10 + x^7 + x^4 + x^3 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^14 + x^12 + x^11 + x^10 + x^9 + x^6 + 
-                  x^5 + x^4 + x^3 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + 
-                  x^14 + x^9 + x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^15 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^5 + x^4 + x^3)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^13 + x^7 + x^4 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^15 + x^13 + x^11 + x^10 + x^9 + x^8 + 
-                  x^7 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + 
-                  x^5 + 1)\), \((x^16 + x^15 + x^14 + x^12 + x^11 + x^9 + 
-                  x^8 + x^7 + x^5 + x^4 + x^3 + x^2)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^12 + x^11 + x^10 + x^9 + x^8 + x^6 + 
-                  x^5)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^12 + x^11 + x^9 + 
-                  x^8 + x^5 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^10 + x^9 + x^8 + 
-                  x^6 + x^5 + x^3 + x^2 + x)\)/\((x^12 + x^10 + x^8 + x^6 + 
-                  x^5 + x^4 + 1)\), \((x^16 + x^13 + x^10 + x^8 + x^7 + x^5 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^12 + x^11 + 
-                  x^10 + x^9 + x^5 + x^4 + x^3 + x^2 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^12 + x^11 + x^10 + x^9 + 
-                  x^7 + x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + 
-                  x^13 + x^9 + x^6 + x^3 + x)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + 
-                  x^14 + x^10 + x^9 + x^8 + x^7 + x^3 + x^2 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^14 + x^13 + x^10 + x^9 + x^8 + x^4 + 
-                  x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^13 + x^12 + x^6 + x^5 + x^4 + 
-                  x)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^15 + x^14 + x^12 + x^11 + 
-                  x^10 + x^8 + x^6 + x^5 + x^3 + x^2 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^14 + x^11 + x^10 + x^6 + x^3 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^14 + x^10 + x^9 + x^7 + x^6 + 
-                  x^5 + x^3 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^13 + 
-                  x^11 + x^9 + x^8 + x^7 + x^4 + x^3 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\)}, {\((x^16 + x^14 + x^13 + x^10 + x^9 + x^8 + x^7 + 
-                  x^6 + x^5 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^13 + 
-                  x^12 + x^10 + x^8 + x^7 + x^2 + x)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^14 + x^10 + x^9 + x^8 + x^6 + x^5 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^7 + x^2 + x + 1)\)/\((x^10 + x^9 + 
-                  x^8 + x^7 + x^6 + x^5 + 1)\), \((x^16 + x^15 + x^14 + x^9 + 
-                  x^8 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^13 + x^12 + 
-                  x^11 + x^9 + x^7 + x^2 + x)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^15 + x^12 + x^10 + x^9 + x^6 + x^5 + x^3 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^10 + x^8 + x^4 + x^2 + 1)\)/\((x^13 + 
-                  x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + x^4 + x + 
-                  1)\), \((x^10 + x^7 + x^6 + x^5 + x^3 + x^2 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^15 + x^13 + x^11 + x^8 + x^4 + 
-                  x^2)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^11 + x^10 + x^9 + 
-                  x^8 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^12 + 
-                  x^11 + x^9 + x^7 + x^6 + x^5 + x^3 + 1)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^16 + x^12 + x^6 + x^4 + x^3 + x^2 + 
-                  x)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^16 + x^10 + x^8 + x^5 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^11 + x^9 + x^8 + x^6 + 
-                  x^5)\)/\((x^15 + x^9 + x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + 
-                  x + 1)\), \((x^18 + x^17 + x^16 + x^14 + x^12 + x^11 + 
-                  x^10 + x^6 + x^5 + x^3 + 1)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^15 + x^14 + x^9 + x^8 + x^4 + x^3 + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^14 + x^13 + x^12 + 
-                  x^11 + x^10 + x^6 + x^5 + x^4)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + 
-                  x^13 + x^12 + x^10 + x^7 + x^5 + x^3 + x^2 + x)\)/\((x^19 + 
-                  x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + 
-                  x^2 + 1)\)}, {\((x^13 + x^2 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^17 + 
-                  x^15 + x^14 + x^13 + x^12 + x^9 + x^7 + x^6 + x^4 + x^3 + 
-                  x^2)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^13 + x^11 + x^8 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^8 + x^7 + x^6 + x^5 + x^3 + 
-                  x)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^15 + x^12 + x^10 + x^7 + x + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  x^4)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^14 + x^13 + x^12 + x^9 + 
-                  x^5 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^11 + x^7 + x^4 + x^3 + 
-                  x^2)\)/\((x^13 + x^12 + x^11 + x^10 + x^9 + x^8 + x^7 + 
-                  x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^13 + x^10 + x^9 + 
-                  x^8 + x^5 + x^4 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^13 + 
-                  x^12 + x^10 + x^9 + x^7 + x^6 + x^4 + x^3 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^15 + x^14 + x^13 + 
-                  x^12 + x^10 + x^9 + x^8 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^16 + x^15 + x^14 + x^13 + x^12 + x^11 + 
-                  x^10 + x^8 + x^6 + x^4 + x^2 + 1)\)/\((x^19 + x^18 + x^17 + 
-                  x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^14 + x^12 + x^8 + x^7 + x^5 + x^3 + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\), \((x^15 + x^14 + x^13 + 
-                  x^12 + x^11 + x^10 + x^8 + x^7 + x^5 + x^4 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^10 + x^9 + x^7 + x^3 + x^2)\)/\((x^15 + x^9 + 
-                  x^8 + x^6 + x^5 + x^4 + x^3 + x^2 + x + 1)\), \((x^16 + 
-                  x^15 + x^14 + x^13 + x^10 + x^9 + x^5)\)/\((x^19 + x^18 + 
-                  x^17 + x^16 + x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^18 + x^16 + x^15 + x^14 + x^12 + x^9 + x^8 + 
-                  x^6 + x^5 + x^3 + x)\)/\((x^19 + x^18 + x^17 + x^16 + 
-                  x^15 + x^13 + x^10 + x^6 + x^5 + x^4 + x^2 + 
-                  1)\), \((x^10 + x^9 + x^8 + x^6 + x^5 + x^3 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^16 + x^15 + x^14 + x^13 + 
-                  x^11 + x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + x^2 + x + 
-                  1)\)/\((x^19 + x^18 + x^17 + x^16 + x^15 + x^13 + x^10 + 
-                  x^6 + x^5 + x^4 + x^2 + 1)\)}, {\((x^16 + x^12 + x^11 + 
-                  x^9 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^13 + x^12 + x^6 + 
-                  x^5 + x^3)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^12 + x^10 + x^7 + 
-                  x^5 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^3 + x)\)/\((x^10 + x^9 + 
-                  x^8 + x^7 + x^6 + x^5 + 1)\), \((x^16 + x^13 + x^12 + 
-                  x^11 + x^9 + x^6 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + 
-                  x^12 + x^9 + x^5 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^13 + 
-                  x^10 + x^9 + x^8 + x^7 + x^5 + x^3 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^8 + x^7 + x^6 + x^3)\)/\((x^12 + x^10 + x^8 + 
-                  x^6 + x^5 + x^4 + 1)\), \((x^16 + x^15 + x^14 + x^13 + 
-                  x^12 + x^11 + x^9 + x^6 + x^5 + x^4 + x^3 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^16 + x^15 + x^14 + x^13 + x^11 + x^9 + x^6 + 
-                  x^5 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^15 + x^12 + x^11 + x^9 + x^8 + 
-                  x^7 + x^6 + x^5 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + 
-                  x^8 + x^7 + x^5 + x^4 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + 
-                  x^14 + x^13 + x^12 + x^11 + x^10 + x^3 + 1)\)/\((x^18 + 
-                  x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^14 + x^13 + x^11 + x^9 + x^8 + x^2 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^11 + x^6 + x^4 + x^3 + x + 
-                  1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^16 + x^12 + x^10 + x^9 + x^6 + 
-                  x^4 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^13 + x^2 + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^17 + x^14 + x^13 + x^10 + x^8 + x^7 + 
-                  x^5 + x^2 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^11 + 
-                  x^8 + x^6 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\)}, {\((x^14 + x^12 + x^11 + 
-                  x^10 + x^9 + x^8 + x^7 + x^4 + x^2 + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^15 + x^12 + x^7 + x^6 + x^5 + x^3 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^12 + x^11 + x^9 + x^8 + x^7 + 
-                  x^4 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^7 + x^6 + x^5 + x^2 + 
-                  1)\)/\((x^10 + x^9 + x^8 + x^7 + x^6 + x^5 + 
-                  1)\), \((x^15 + x^12 + x^10 + x^8 + x^6 + x^4 + x^3 + 
-                  x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^15 + x^14 + x^13 + x^12 + 
-                  x^10 + x^9 + x^7 + x^6 + x^3 + 1)\)/\((x^18 + x^16 + x^14 + 
-                  x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + 
-                  x^13 + x^11 + x^10 + x^7 + x^6 + x^5 + x^3 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^10 + x^9 + x^7 + x^5 + x^4 + x^3 + 
-                  x^2 + x + 1)\)/\((x^12 + x^10 + x^8 + x^6 + x^5 + x^4 + 
-                  1)\), \((x^15 + x^11 + x^10 + x^6 + x^5 + x^3 + x^2 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^16 + x^13 + x^12 + x^10 + x^7 + x^6 + 
-                  x^5 + x^3 + x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^13 + x^11 + 
-                  x^8 + x^4 + x^2 + x + 1)\)/\((x^18 + x^16 + x^14 + x^13 + 
-                  x^9 + x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^14 + x^10 + 
-                  x^9 + x^7 + x^6 + x^5 + x^4 + x^3 + x)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^13 + x^11 + x^10 + x^9 + x^7 + x^5 + x + 
-                  1)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + 
-                  x^4 + x + 1)\), \((x^12 + x^10 + x^5 + x^4 + x^3 + 
-                  x^2)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + x^7 + 
-                  x^6 + x^4 + x + 1)\), \((x^10 + x^9 + x^6 + x^5 + 
-                  1)\)/\((x^14 + x^13 + x^12 + x^11 + x^10 + x^9 + x^7 + 
-                  x^6 + x^4 + x^2 + 1)\), \((x^15 + x^12 + x^11 + x^9 + x^8 + 
-                  x^6 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\), \((x^16 + x^13 + x^12 + x^10 + 
-                  x^7 + x^6 + x^4)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + 
-                  x^8 + x^7 + x^6 + x^4 + x + 1)\), \((x^15 + x^14 + x^10 + 
-                  x^9 + x^8 + x^4 + x^3 + x^2 + x + 1)\)/\((x^18 + x^16 + 
-                  x^14 + x^13 + x^9 + x^8 + x^7 + x^6 + x^4 + x + 
-                  1)\), \((x^17 + x^16 + x^15 + x^14 + x^11 + x^10 + x^5 + 
-                  x^4 + x^3 + x)\)/\((x^18 + x^16 + x^14 + x^13 + x^9 + x^8 + 
-                  x^7 + x^6 + x^4 + x + 1)\)}}\)}], ";"}]}], "Input"],
+      FontSize->14]}], "Input"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
-    \(PolynomialMod[Ainv18 . \((A18\  - \ IdentityMatrix[19]\ *\ x)\), 
-        2\ ]\  \[Equal] \ IdentityMatrix[19]\)], "Input"],
-
-Cell[BoxData[
-    \(True\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(LinAutAn[A18, \ B18, \ n, \ Ainv18]\)], "Input"],
+    \(LinAutAn[A18, \ B18, \ Length[B18]]\)], "Input"],
 
 Cell[BoxData[
     \("General Relation: "\)], "Print"],
@@ -1874,26 +1137,6 @@ Cell[BoxData[
     \("-----------------------"\)], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("Period: "\[InvisibleSpace]21\),
-      SequenceForm[ "Period: ", 21],
-      Editable->False]], "Print"],
-
-Cell[BoxData[
-    InterpretationBox[\("Number of cycles:  "\[InvisibleSpace]6\),
-      SequenceForm[ "Number of cycles:  ", 6],
-      Editable->False]], "Print"],
-
-Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^6, 1}}\),
-      SequenceForm[ "CharPolyS: ", {{
-        Plus[ 1, x, 
-          Power[ x, 6]], 1}}],
-      Editable->False]], "Print"],
-
-Cell[BoxData[
-    \("-----------------------"\)], "Print"],
-
-Cell[BoxData[
     InterpretationBox[\("Period: "\[InvisibleSpace]51\),
       SequenceForm[ "Period: ", 51],
       Editable->False]], "Print"],
@@ -1913,6 +1156,26 @@ Cell[BoxData[
           Power[ x, 6], 
           Power[ x, 7], 
           Power[ x, 8]], 1}}],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \("-----------------------"\)], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Period: "\[InvisibleSpace]63\),
+      SequenceForm[ "Period: ", 63],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Number of cycles:  "\[InvisibleSpace]2\),
+      SequenceForm[ "Number of cycles:  ", 2],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^6, 1}}\),
+      SequenceForm[ "CharPolyS: ", {{
+        Plus[ 1, x, 
+          Power[ x, 6]], 1}}],
       Editable->False]], "Print"],
 
 Cell[BoxData[
@@ -2042,10 +1305,10 @@ Cell[BoxData[
 }, Open  ]]
 },
 FrontEndVersion->"5.0 for Microsoft Windows",
-ScreenRectangle->{{0, 2136}, {0, 1361}},
-WindowSize->{1683, 1382},
-WindowMargins->{{-3, Automatic}, {-3, Automatic}},
-Magnification->2
+ScreenRectangle->{{0, 1858}, {0, 1022}},
+WindowSize->{927, 1048},
+WindowMargins->{{Automatic, -7}, {-7, Automatic}},
+Magnification->1
 ]
 
 (*******************************************************************
@@ -2065,139 +1328,155 @@ CellTagsIndex->{}
 
 (*NotebookFileOutline
 Notebook[{
-Cell[1754, 51, 3247, 60, 1915, "Input"],
+Cell[1754, 51, 3247, 60, 1110, "Input"],
 
 Cell[CellGroupData[{
-Cell[5026, 115, 413, 7, 249, "Input"],
-Cell[5442, 124, 49, 1, 81, "Output"],
-Cell[5494, 127, 802, 23, 47, "Print"]
+Cell[5026, 115, 483, 8, 150, "Input"],
+Cell[5512, 125, 53, 1, 29, "Output"],
+Cell[5568, 128, 68, 1, 29, "Output"],
+Cell[5639, 131, 1028, 29, 25, "Print"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6333, 155, 151, 2, 113, "Input"],
-Cell[6487, 159, 70, 1, 79, "Output"]
+Cell[6704, 165, 151, 2, 50, "Input"],
+Cell[6858, 169, 70, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6594, 165, 127, 3, 79, "Input"],
-Cell[6724, 170, 70, 1, 79, "Output"]
+Cell[6965, 175, 125, 3, 30, "Input"],
+Cell[7093, 180, 70, 1, 29, "Output"]
+}, Open  ]],
+Cell[7178, 184, 1032, 18, 330, "Input"],
+
+Cell[CellGroupData[{
+Cell[8235, 206, 220, 4, 70, "Input"],
+Cell[8458, 212, 53, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6831, 176, 83, 1, 79, "Input"],
-Cell[6917, 179, 55, 1, 82, "Output"]
-}, Open  ]],
-Cell[6987, 183, 10968, 199, 6403, "Input"],
-Cell[17958, 384, 1552, 22, 453, "Input"],
-
-Cell[CellGroupData[{
-Cell[19535, 410, 55, 1, 79, "Input"],
-Cell[19593, 413, 91, 1, 79, "Output"]
+Cell[8548, 218, 512, 11, 110, "Input"],
+Cell[9063, 231, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[19721, 419, 51, 1, 79, "Input"],
-Cell[19775, 422, 2857, 77, 47, "Print"]
+Cell[9138, 237, 520, 11, 110, "Input"],
+Cell[9661, 250, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[22669, 504, 570, 11, 283, "Input"],
-Cell[23242, 517, 38, 1, 79, "Output"]
-}, Open  ]],
-Cell[23295, 521, 26, 0, 55, "Input"],
-
-Cell[CellGroupData[{
-Cell[23346, 525, 64, 1, 55, "Input"],
-Cell[23413, 528, 53, 1, 47, "Print"],
-Cell[23469, 531, 2857, 77, 47, "Print"],
-Cell[26329, 610, 41, 1, 47, "Print"],
-Cell[26373, 613, 125, 2, 49, "Print"],
-Cell[26501, 617, 51, 1, 47, "Print"],
-Cell[26555, 620, 150, 2, 49, "Print"],
-Cell[26708, 624, 52, 1, 47, "Print"],
-Cell[26763, 627, 139, 3, 47, "Print"],
-Cell[26905, 632, 161, 3, 47, "Print"],
-Cell[27069, 637, 198, 4, 47, "Print"],
-Cell[27270, 643, 58, 1, 47, "Print"],
-Cell[27331, 646, 139, 3, 47, "Print"],
-Cell[27473, 651, 161, 3, 47, "Print"],
-Cell[27637, 656, 220, 6, 53, "Print"],
-Cell[27860, 664, 58, 1, 47, "Print"],
-Cell[27921, 667, 139, 3, 47, "Print"],
-Cell[28063, 672, 161, 3, 47, "Print"],
-Cell[28227, 677, 414, 12, 53, "Print"],
-Cell[28644, 691, 58, 1, 47, "Print"],
-Cell[28705, 694, 141, 3, 47, "Print"],
-Cell[28849, 699, 161, 3, 47, "Print"],
-Cell[29013, 704, 334, 10, 53, "Print"],
-Cell[29350, 716, 58, 1, 47, "Print"],
-Cell[29411, 719, 147, 3, 47, "Print"],
-Cell[29561, 724, 161, 3, 47, "Print"],
-Cell[29725, 729, 879, 27, 53, "Print"],
-Cell[30607, 758, 58, 1, 47, "Print"],
-Cell[30668, 761, 147, 3, 47, "Print"],
-Cell[30818, 766, 161, 3, 47, "Print"],
-Cell[30982, 771, 546, 16, 53, "Print"],
-Cell[31531, 789, 58, 1, 47, "Print"],
-Cell[31592, 792, 149, 3, 47, "Print"],
-Cell[31744, 797, 161, 3, 47, "Print"],
-Cell[31908, 802, 1120, 34, 53, "Print"],
-Cell[33031, 838, 58, 1, 47, "Print"],
-Cell[33092, 841, 149, 3, 47, "Print"],
-Cell[33244, 846, 161, 3, 47, "Print"],
-Cell[33408, 851, 663, 20, 53, "Print"],
-Cell[34074, 873, 58, 1, 47, "Print"],
-Cell[34135, 876, 37, 1, 47, "Print"]
-}, Open  ]],
-Cell[34187, 880, 62113, 838, 22721, "Input"],
-
-Cell[CellGroupData[{
-Cell[96325, 1722, 143, 2, 60, "Input"],
-Cell[96471, 1726, 38, 1, 58, "Output"]
+Cell[9736, 256, 636, 13, 130, "Input"],
+Cell[10375, 271, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[96546, 1732, 68, 1, 60, "Input"],
-Cell[96617, 1735, 53, 1, 50, "Print"],
-Cell[96673, 1738, 2857, 77, 50, "Print"],
-Cell[99533, 1817, 41, 1, 50, "Print"],
-Cell[99577, 1820, 125, 2, 50, "Print"],
-Cell[99705, 1824, 51, 1, 50, "Print"],
-Cell[99759, 1827, 157, 2, 50, "Print"],
-Cell[99919, 1831, 52, 1, 50, "Print"],
-Cell[99974, 1834, 139, 3, 50, "Print"],
-Cell[100116, 1839, 161, 3, 50, "Print"],
-Cell[100280, 1844, 159, 3, 50, "Print"],
-Cell[100442, 1849, 58, 1, 50, "Print"],
-Cell[100503, 1852, 139, 3, 50, "Print"],
-Cell[100645, 1857, 161, 3, 50, "Print"],
-Cell[100809, 1862, 293, 8, 50, "Print"],
-Cell[101105, 1872, 58, 1, 50, "Print"],
-Cell[101166, 1875, 141, 3, 50, "Print"],
-Cell[101310, 1880, 161, 3, 50, "Print"],
-Cell[101474, 1885, 214, 5, 50, "Print"],
-Cell[101691, 1892, 58, 1, 50, "Print"],
-Cell[101752, 1895, 141, 3, 50, "Print"],
-Cell[101896, 1900, 163, 3, 50, "Print"],
-Cell[102062, 1905, 357, 10, 50, "Print"],
-Cell[102422, 1917, 58, 1, 50, "Print"],
-Cell[102483, 1920, 143, 3, 50, "Print"],
-Cell[102629, 1925, 163, 3, 50, "Print"],
-Cell[102795, 1930, 554, 16, 50, "Print"],
-Cell[103352, 1948, 58, 1, 50, "Print"],
-Cell[103413, 1951, 143, 3, 50, "Print"],
-Cell[103559, 1956, 161, 3, 50, "Print"],
-Cell[103723, 1961, 399, 11, 50, "Print"],
-Cell[104125, 1974, 58, 1, 50, "Print"],
-Cell[104186, 1977, 145, 3, 50, "Print"],
-Cell[104334, 1982, 163, 3, 50, "Print"],
-Cell[104500, 1987, 480, 14, 50, "Print"],
-Cell[104983, 2003, 58, 1, 50, "Print"],
-Cell[105044, 2006, 145, 3, 50, "Print"],
-Cell[105192, 2011, 163, 3, 50, "Print"],
-Cell[105358, 2016, 625, 18, 50, "Print"],
-Cell[105986, 2036, 58, 1, 50, "Print"],
-Cell[106047, 2039, 37, 1, 50, "Print"]
+Cell[10450, 277, 57, 1, 30, "Input"],
+Cell[10510, 280, 138, 3, 29, "Output"]
+}, Open  ]],
+Cell[10663, 286, 10074, 183, 3390, "Input"],
+Cell[20740, 471, 1552, 22, 250, "Input"],
+
+Cell[CellGroupData[{
+Cell[22317, 497, 55, 1, 30, "Input"],
+Cell[22375, 500, 91, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[22503, 506, 51, 1, 30, "Input"],
+Cell[22557, 509, 2857, 77, 25, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25451, 591, 570, 11, 150, "Input"],
+Cell[26024, 604, 38, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26099, 610, 56, 1, 30, "Input"],
+Cell[26158, 613, 53, 1, 25, "Print"],
+Cell[26214, 616, 2857, 77, 25, "Print"],
+Cell[29074, 695, 41, 1, 25, "Print"],
+Cell[29118, 698, 125, 2, 25, "Print"],
+Cell[29246, 702, 51, 1, 25, "Print"],
+Cell[29300, 705, 150, 2, 25, "Print"],
+Cell[29453, 709, 52, 1, 25, "Print"],
+Cell[29508, 712, 139, 3, 25, "Print"],
+Cell[29650, 717, 161, 3, 25, "Print"],
+Cell[29814, 722, 198, 4, 25, "Print"],
+Cell[30015, 728, 58, 1, 25, "Print"],
+Cell[30076, 731, 139, 3, 25, "Print"],
+Cell[30218, 736, 161, 3, 25, "Print"],
+Cell[30382, 741, 220, 6, 25, "Print"],
+Cell[30605, 749, 58, 1, 25, "Print"],
+Cell[30666, 752, 139, 3, 25, "Print"],
+Cell[30808, 757, 161, 3, 25, "Print"],
+Cell[30972, 762, 414, 12, 25, "Print"],
+Cell[31389, 776, 58, 1, 25, "Print"],
+Cell[31450, 779, 141, 3, 25, "Print"],
+Cell[31594, 784, 161, 3, 25, "Print"],
+Cell[31758, 789, 334, 10, 25, "Print"],
+Cell[32095, 801, 58, 1, 25, "Print"],
+Cell[32156, 804, 147, 3, 25, "Print"],
+Cell[32306, 809, 161, 3, 25, "Print"],
+Cell[32470, 814, 879, 27, 25, "Print"],
+Cell[33352, 843, 58, 1, 25, "Print"],
+Cell[33413, 846, 147, 3, 25, "Print"],
+Cell[33563, 851, 161, 3, 25, "Print"],
+Cell[33727, 856, 546, 16, 25, "Print"],
+Cell[34276, 874, 58, 1, 25, "Print"],
+Cell[34337, 877, 149, 3, 25, "Print"],
+Cell[34489, 882, 161, 3, 25, "Print"],
+Cell[34653, 887, 1120, 34, 44, "Print"],
+Cell[35776, 923, 58, 1, 25, "Print"],
+Cell[35837, 926, 149, 3, 25, "Print"],
+Cell[35989, 931, 161, 3, 25, "Print"],
+Cell[36153, 936, 663, 20, 25, "Print"],
+Cell[36819, 958, 58, 1, 25, "Print"],
+Cell[36880, 961, 37, 1, 25, "Print"]
+}, Open  ]],
+Cell[36932, 965, 1666, 26, 250, "Input"],
+
+Cell[CellGroupData[{
+Cell[38623, 995, 68, 1, 30, "Input"],
+Cell[38694, 998, 53, 1, 25, "Print"],
+Cell[38750, 1001, 2857, 77, 25, "Print"],
+Cell[41610, 1080, 41, 1, 25, "Print"],
+Cell[41654, 1083, 125, 2, 25, "Print"],
+Cell[41782, 1087, 51, 1, 25, "Print"],
+Cell[41836, 1090, 157, 2, 25, "Print"],
+Cell[41996, 1094, 52, 1, 25, "Print"],
+Cell[42051, 1097, 139, 3, 25, "Print"],
+Cell[42193, 1102, 161, 3, 25, "Print"],
+Cell[42357, 1107, 159, 3, 25, "Print"],
+Cell[42519, 1112, 58, 1, 25, "Print"],
+Cell[42580, 1115, 139, 3, 25, "Print"],
+Cell[42722, 1120, 161, 3, 25, "Print"],
+Cell[42886, 1125, 293, 8, 25, "Print"],
+Cell[43182, 1135, 58, 1, 25, "Print"],
+Cell[43243, 1138, 141, 3, 25, "Print"],
+Cell[43387, 1143, 163, 3, 25, "Print"],
+Cell[43553, 1148, 357, 10, 25, "Print"],
+Cell[43913, 1160, 58, 1, 25, "Print"],
+Cell[43974, 1163, 141, 3, 25, "Print"],
+Cell[44118, 1168, 161, 3, 25, "Print"],
+Cell[44282, 1173, 214, 5, 25, "Print"],
+Cell[44499, 1180, 58, 1, 25, "Print"],
+Cell[44560, 1183, 143, 3, 25, "Print"],
+Cell[44706, 1188, 163, 3, 25, "Print"],
+Cell[44872, 1193, 554, 16, 25, "Print"],
+Cell[45429, 1211, 58, 1, 25, "Print"],
+Cell[45490, 1214, 143, 3, 25, "Print"],
+Cell[45636, 1219, 161, 3, 25, "Print"],
+Cell[45800, 1224, 399, 11, 25, "Print"],
+Cell[46202, 1237, 58, 1, 25, "Print"],
+Cell[46263, 1240, 145, 3, 25, "Print"],
+Cell[46411, 1245, 163, 3, 25, "Print"],
+Cell[46577, 1250, 480, 14, 25, "Print"],
+Cell[47060, 1266, 58, 1, 25, "Print"],
+Cell[47121, 1269, 145, 3, 25, "Print"],
+Cell[47269, 1274, 163, 3, 25, "Print"],
+Cell[47435, 1279, 625, 18, 25, "Print"],
+Cell[48063, 1299, 58, 1, 25, "Print"],
+Cell[48124, 1302, 37, 1, 25, "Print"]
 }, Open  ]]
 }
 ]
