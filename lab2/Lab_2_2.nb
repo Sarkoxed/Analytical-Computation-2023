@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     48177,       1306]*)
-(*NotebookOutlinePosition[     48842,       1329]*)
-(*  CellTagsIndexPosition[     48798,       1325]*)
+(*NotebookOptionsPosition[     49126,       1347]*)
+(*NotebookOutlinePosition[     49791,       1370]*)
+(*  CellTagsIndexPosition[     49747,       1366]*)
 (*WindowFrame->Normal*)
 
 
@@ -72,20 +72,22 @@ Cell[BoxData[{
 \[IndentingNewLine]];\)\(\[IndentingNewLine]\)
     \)\), "\[IndentingNewLine]", 
     \(\(ClearAll[LFSR];\)\), "\[IndentingNewLine]", 
-    \(\(\(LFSR[A_, \ 
+    \(\(LFSR[A_, \ 
           n_]\  := \[IndentingNewLine]Module[{tmp}, \[IndentingNewLine]tmp\  \
-= \ Det[A\  + \ x\ *\ IdentityMatrix[n]]; \[IndentingNewLine]tmp\  = \ 
-            Mod[CoefficientList[tmp, \ x], \ 2]; \[IndentingNewLine]Take[
-            tmp, \ n]\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
-    \)\), "\[IndentingNewLine]", 
+= \ Det[IdentityMatrix[n]\  - \ A\ *\ x]; \[IndentingNewLine]tmp\  = \ 
+            Mod[CoefficientList[tmp, \ x], \ 2]; \[IndentingNewLine]While[
+            Length[tmp]\  \[LessEqual] \ 
+              n, \[IndentingNewLine]\(tmp\  = \ 
+                Append[tmp, \ 
+                  0];\)\[IndentingNewLine]]; \[IndentingNewLine]Reverse[
+            Take[tmp, \ \(-n\)]]\[IndentingNewLine]];\)\[IndentingNewLine]\), \
+"\[IndentingNewLine]", 
     \(\(ClearAll[CharPoly];\)\), "\[IndentingNewLine]", 
-    \(\(\(CharPoly[A_, \ n_]\  := \ 
-        x^Range[0, \ n] . 
-          Mod[CoefficientList[Det[A\  + \ x\ *\ IdentityMatrix[n]], \ x], 
-            2];\)\(\[IndentingNewLine]\)
-    \)\), "\[IndentingNewLine]", 
+    \(\(CharPoly[A_, \ n_]\  := \ 
+        PolynomialMod[Det[IdentityMatrix[n]\  - \ A\ *\ x], \ 
+          2];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
     \(\(ClearAll[PrintLFSR];\)\), "\[IndentingNewLine]", 
-    \(\(\(PrintLFSR[r_, \ 
+    \(\(PrintLFSR[r_, \ 
           n_]\  := \ \[IndentingNewLine]Module[{tmp, 
             tmp1}, \[IndentingNewLine]tmp\  = \ 
             StringForm["\<x[``]\>", \ "\<m\>"\  + \ 
@@ -93,10 +95,10 @@ Cell[BoxData[{
             Table[StringForm["\<x[``]\>", \ "\<m\>"\  + \ i\  - \ 1], \ {i, \ 
                 n}]; \[IndentingNewLine]tmp1 = \ 
             tmp1\ \ *\ \ r; \[IndentingNewLine]Print[tmp, \ "\< = \>", \ 
-            Total[tmp1]];\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
-    \)\), "\[IndentingNewLine]", 
+            Total[tmp1]];\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
+\[IndentingNewLine]", 
     \(\(ClearAll[LFSRgetn];\)\), "\[IndentingNewLine]", 
-    \(\(\(LFSRgetn[r_, \ st_, \ n_, \ 
+    \(\(LFSRgetn[r_, \ st_, \ n_, \ 
           k_]\  := \ \[IndentingNewLine]Module[{tmp, \ i, \ 
             tmpst}, \[IndentingNewLine]tmpst\  = \ st; \[IndentingNewLine]For[
             i\  = \ 0, \ 
@@ -105,29 +107,32 @@ Cell[BoxData[{
               Take[tmpst, \ \(-n\)\  + \ 1]; \[IndentingNewLine]tmpst\  = \ 
               Append[tmpst, \ 
                 tmp];\[IndentingNewLine]]; \[IndentingNewLine]tmp\
-\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
-    \)\), "\[IndentingNewLine]", 
+\[IndentingNewLine]];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
     \(\(ClearAll[getn];\)\), "\[IndentingNewLine]", 
     \(\(getn[A_, \ B_, \ C_, \ n_]\  := \ 
-        Mod[\((MatrixPower[A, \ n] . C)\) . B, \ 2];\)\)}], "Input"],
+        Mod[B . MatrixPower[A, \ n] . C, \ 2];\)\)}], "Input"],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
-    \(\(\(\(A1\  = \ {{1, \ 1, \ 0, \ 0}, \ {1, \ 0, \ 1, 1}, \ {1, \ 1, \ 
-            1, \ 0}, \ {1, \ 0, \ 1, \ 0}};\)\[IndentingNewLine]
-    \(\(B1\  = \ {0, \ 1, \ 0, \ 1};\)\(\[IndentingNewLine]\)
-    \)\[IndentingNewLine]
-    \(generalrelation\  = \ LFSR[A1, \ 4];\)\[IndentingNewLine]
-    CharPoly[A1, \ 4]\[IndentingNewLine]
-    Factor[CharPoly[A1, \ 4], \ Modulus \[Rule] \ 2]\[IndentingNewLine]
-    \(PrintLFSR[generalrelation, \ 4];\)\)\(\ \)\)\)], "Input"],
+Cell[BoxData[{
+    \(\(A1\  = \ {{1, \ 0, \ 1, \ 1}, \ {1, 1, 1, \ 0}, \ {0, \ 0, \ 0, \ 
+            1}, \ {0, \ 0, 1, \ 1}};\)\), "\[IndentingNewLine]", 
+    \(\(B1\  = \ {0, \ 1, \ 0, \ 
+          1};\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(generalrelation\  = \ LFSR[A1, \ 4]\), "\[IndentingNewLine]", 
+    \(CharPoly[A1, \ 4]\), "\[IndentingNewLine]", 
+    \(Factor[CharPoly[A1, \ 4], \ 
+      Modulus \[Rule] \ 2]\), "\[IndentingNewLine]", 
+    \(\(PrintLFSR[generalrelation, \ 4];\)\ \)}], "Input"],
 
 Cell[BoxData[
-    \(1 + x + x\^2 + x\^4\)], "Output"],
+    \({1, 1, 0, 1}\)], "Output"],
 
 Cell[BoxData[
-    \(\((1 + x)\)\ \((1 + x\^2 + x\^3)\)\)], "Output"],
+    \(1 + x + x\^3 + x\^4\)], "Output"],
+
+Cell[BoxData[
+    \(\((1 + x)\)\^2\ \((1 + x + x\^2)\)\)], "Output"],
 
 Cell[BoxData[
     InterpretationBox[
@@ -145,9 +150,9 @@ Cell[BoxData[
             StringForm[ "x[``]", 
               Plus[ 1, "m"]],
             Editable->False], "+", 
-          InterpretationBox["\<\"x[\\!\\(2 + \\\"m\\\"\\)]\"\>",
+          InterpretationBox["\<\"x[\\!\\(3 + \\\"m\\\"\\)]\"\>",
             StringForm[ "x[``]", 
-              Plus[ 2, "m"]],
+              Plus[ 3, "m"]],
             Editable->False]}]}],
       SequenceForm[ 
         StringForm[ "x[``]", 
@@ -157,7 +162,7 @@ Cell[BoxData[
           StringForm[ "x[``]", 
             Plus[ 1, "m"]], 
           StringForm[ "x[``]", 
-            Plus[ 2, "m"]]]],
+            Plus[ 3, "m"]]]],
       Editable->False]], "Print"]
 }, Open  ]],
 
@@ -165,38 +170,41 @@ Cell[CellGroupData[{
 
 Cell[BoxData[{
     \(\(C1\  = \ {1, \ 1, \ 1, \ 1};\)\), "\[IndentingNewLine]", 
-    \(Table[getn[A1, \ B1, \ C1, \ i], \ {i, \ 0, \ 11}]\)}], "Input"],
+    \(Table[getn[A1, \ B1, \ C1, \ i], \ {i, \ 0, 29}]\)}], "Input"],
 
 Cell[BoxData[
-    \({0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1}\)], "Output"]
+    \({0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 
+      0, 0, 1, 0, 0, 1, 0}\)], "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
     \(Table[
-      LFSRgetn[generalrelation, \ {1, 1, 0, 0}, \ 4, \ i], \ {i, \ 1, \ 
-        12}]\)], "Input"],
+      LFSRgetn[generalrelation, \ {0, \ 0, 1, 0}, \ 4, \ i], \ {i, \ 1, \ 
+        15}]\)], "Input"],
 
 Cell[BoxData[
-    \({0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1}\)], "Output"]
+    \({0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
     \(\(ClearAll[GeneratingFunction];\)\), "\[IndentingNewLine]", 
     \(\(GeneratingFunction[A_, \ B_, \ s0_, \ chp_, \ 
           n_]\  := \[IndentingNewLine]Module[{Sp}, \[IndentingNewLine]coeffs\ \
- = \ Reverse[
-              CoefficientList[chp, \ 
-                x]]; \[IndentingNewLine]Ps\  = \ {}; \[IndentingNewLine]For[
-            i\  = \ 0, \ 
+ = \ CoefficientList[chp, \ x]; \[IndentingNewLine]While[
+            Length[coeffs]\  \[LessEqual] \ 
+              n, \[IndentingNewLine]\(coeffs\  = \ 
+                Append[coeffs, \ 
+                  0];\)\[IndentingNewLine]]; \[IndentingNewLine]Ps\  = \ {}; \
+\[IndentingNewLine]For[i\  = \ 0, \ 
             i\  <= \ n - 1, \ \(i++\), \[IndentingNewLine]tmp\  = \ 
               Reverse[Take[s0, \ i\  + \ 1]]; \[IndentingNewLine]tmprel\  = \ 
               Take[coeffs, \ i\  + \ 1]; \[IndentingNewLine]res\  = \ 
               Mod[tmp . tmprel, \ 2]; \[IndentingNewLine]Ps\  = \ 
               Append[Ps, \ 
                 res];\[IndentingNewLine]]; \[IndentingNewLine]P\  = \ 
-            x^Range[0, \ n - 1] . Reverse[Ps]; \[IndentingNewLine]Q\  = \ 
+            x^Range[0, \ n - 1] . Ps; \[IndentingNewLine]Q\  = \ 
             PolynomialMod[chp, \ 2]; \[IndentingNewLine]G\  = \ 
             Factor[P/Q, \ 
               Modulus \[Rule] 
@@ -207,27 +215,36 @@ Cell[CellGroupData[{
 Cell[BoxData[{
     \(CharPoly[A1, \ 4]\), "\[IndentingNewLine]", 
     \(\(H1\  = \ 
-        A1\  - \ IdentityMatrix[4]\ *\ x;\)\), "\[IndentingNewLine]", 
+        IdentityMatrix[4]\  - \ x\ *\ A1;\)\), "\[IndentingNewLine]", 
     \(\(H1\  = \ PolynomialMod[Inverse[H1], \ 2];\)\)}], "Input"],
 
 Cell[BoxData[
-    \(1 + x + x\^2 + x\^4\)], "Output"]
+    \(1 + x + x\^3 + x\^4\)], "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
     \(\(S1\  = \ {1, \ 0, \ 1, \ 1};\)\), "\[IndentingNewLine]", 
-    \(\(Qx\  = \ 
-        Factor[PolynomialMod[B1 . H1 . S1, \ 2], \ 
-          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
-    \(\(state0\  = \ 
-        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, 
-            3}];\)\), "\[IndentingNewLine]", 
-    \(\(G\  = 
-        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
-          4];\)\), "\[IndentingNewLine]", 
+    \(Qx\  = \ 
+      Factor[PolynomialMod[B1 . H1 . S1, \ 2], \ 
+        Modulus \[Rule] 2]\), "\[IndentingNewLine]", 
+    \(state0\  = \ 
+      Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, 
+          3}]\), "\[IndentingNewLine]", 
+    \(G\  = 
+      GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+        4]\), "\[IndentingNewLine]", 
     \(Qx\  \[Equal] \ G\)}], "Input"],
+
+Cell[BoxData[
+    \(\(1 + x\)\/\(1 + x + x\^2\)\)], "Output"],
+
+Cell[BoxData[
+    \({1, 0, 1, 1}\)], "Output"],
+
+Cell[BoxData[
+    \(\(1 + x\)\/\(1 + x + x\^2\)\)], "Output"],
 
 Cell[BoxData[
     \(True\)], "Output"]
@@ -237,16 +254,25 @@ Cell[CellGroupData[{
 
 Cell[BoxData[{
     \(\(S1\  = \ {0, \ 0, \ 0, \ 1};\)\), "\[IndentingNewLine]", 
-    \(\(Qx\  = \ 
-        Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
-          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
-    \(\(state0\  = \ 
-        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
-            3}];\)\), "\[IndentingNewLine]", 
-    \(\(G\  = 
-        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
-          4];\)\), "\[IndentingNewLine]", 
+    \(Qx\  = \ 
+      Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
+        Modulus \[Rule] 2]\), "\[IndentingNewLine]", 
+    \(state0\  = \ 
+      Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
+          3}]\), "\[IndentingNewLine]", 
+    \(G\  = 
+      GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+        4]\), "\[IndentingNewLine]", 
     \(G\  \[Equal] \ Qx\)}], "Input"],
+
+Cell[BoxData[
+    \(1\/\(1 + x + x\^2\)\)], "Output"],
+
+Cell[BoxData[
+    \({1, 1, 0, 1}\)], "Output"],
+
+Cell[BoxData[
+    \(1\/\(1 + x + x\^2\)\)], "Output"],
 
 Cell[BoxData[
     \(True\)], "Output"]
@@ -258,16 +284,25 @@ Cell[BoxData[{
     \(\(S1\  = \ {0, \ 0, 1, \ 1};\)\), "\[IndentingNewLine]", 
     \(\(PolynomialMod[B1 . Minors[A1 - \ IdentityMatrix[4]\ *\ x] . S1, \ 
         2];\)\), "\[IndentingNewLine]", 
-    \(\(Qx\  = \ 
-        Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
-          Modulus \[Rule] 2];\)\), "\[IndentingNewLine]", 
-    \(\(state0\  = \ 
-        Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
-            3}];\)\), "\[IndentingNewLine]", 
-    \(\(G\  = \ 
-        GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
-          4];\)\), "\[IndentingNewLine]", 
+    \(Qx\  = \ 
+      Factor[PolynomialMod[\((B1 . H1)\) . S1, \ 2], \ 
+        Modulus \[Rule] 2]\), "\[IndentingNewLine]", 
+    \(state0\  = \ 
+      Table[Mod[B1 . MatrixPower[A1, \ i] . S1, \ 2], \ {i, \ 0, \ 
+          3}]\), "\[IndentingNewLine]", 
+    \(G\  = \ 
+      GeneratingFunction[A1, \ B1, \ state0, \ CharPoly[A1, \ 4], \ 
+        4]\), "\[IndentingNewLine]", 
     \(G\  \[Equal] \ Qx\)}], "Input"],
+
+Cell[BoxData[
+    \(1\/\(\((1 + x)\)\^2\ \((1 + x + x\^2)\)\)\)], "Output"],
+
+Cell[BoxData[
+    \({1, 1, 1, 0}\)], "Output"],
+
+Cell[BoxData[
+    \(1\/\(\((1 + x)\)\^2\ \((1 + x + x\^2)\)\)\)], "Output"],
 
 Cell[BoxData[
     \(True\)], "Output"]
@@ -279,9 +314,9 @@ Cell[BoxData[
     \(GetCycles[A1, \ B1, \ 4]\)], "Input"],
 
 Cell[BoxData[
-    \({{1, 2, {1, 1 + x}}, {7, 
-        14, {\((1 + x)\)\ \((1 + x\^2 + x\^3)\), 
-          1 + x\^2 + x\^3}}}\)], "Output"]
+    \({{1, 2, {1, 1 + x}}, {2, 2, {\((1 + x)\)\^2}}, {3, 
+        6, {1 + x + x\^2, \((1 + x)\)\ \((1 + x + x\^2)\)}}, {6, 
+        6, {\((1 + x)\)\^2\ \((1 + x + x\^2)\)}}}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -345,7 +380,7 @@ Cell[BoxData[{
 \[IndentingNewLine]]; \[IndentingNewLine]tmp\[IndentingNewLine]];\)\
 \[IndentingNewLine]\[IndentingNewLine]\), "\[IndentingNewLine]", 
     \(\(ClearAll[GetCycles];\)\), "\[IndentingNewLine]", 
-    \(\(\(GetCycles[A_, \ B_, \ 
+    \(\(GetCycles[A_, \ B_, \ 
           n_]\  := \[IndentingNewLine]Module[\[IndentingNewLine]{state, \ 
             stateinit, \ 
             statematrices, \ \[IndentingNewLine]matrpows, \ \ statematrix, \ 
@@ -373,8 +408,7 @@ Cell[BoxData[{
               GeneratingFunction[A, \ B, \ init, \ charp, \ 
                 n]; \[IndentingNewLine]gf\  = \ 
               Factor[Denominator[gf], \ 
-                Modulus \[Rule] \ 
-                  2]; \[IndentingNewLine]\[IndentingNewLine]If[
+                Modulus \[Rule] \ 2]; \[IndentingNewLine]If[
               gf\  \[Equal] \ 
                 1, \[IndentingNewLine]allstates[\([1, \ 2]\)]\  += \ 
                 1; \[IndentingNewLine]allstates[\([1, \ 
@@ -405,9 +439,8 @@ Cell[BoxData[{
               Divisors[order]; \[IndentingNewLine]\[IndentingNewLine]For[
               j\  = \ 1, \ 
               j\  \[LessEqual] \ 
-                Length[orders], \ \(j++\), \[IndentingNewLine]\
-\[IndentingNewLine]order\  = \ orders[\([j]\)]; \[IndentingNewLine]For[
-                k\  = 1, \ 
+                Length[orders], \ \(j++\), \[IndentingNewLine]order\  = \ 
+                orders[\([j]\)]; \[IndentingNewLine]For[k\  = 1, \ 
                 k\  \[LessEqual] \ 
                   Length[statematrices], \ \(k++\), \[IndentingNewLine]\(If[
                     statematrices[\([k, 1]\)]\  \[Equal] \ 
@@ -421,8 +454,8 @@ Cell[BoxData[{
                     m}\[IndentingNewLine]]; \[IndentingNewLine]\
 \[IndentingNewLine]flag\  = \ 0; \[IndentingNewLine]If[
                 init\  \[Equal] \ state, \[IndentingNewLine]For[k\  = \ 1, \ 
-                  k\  <= \ 
-                    Length[allstates], \ \(k++\), \[IndentingNewLine]\(If[
+                  k\  <= \ Length[
+                      allstates], \ \(k++\), \[IndentingNewLine]\(If[
                       allstates[\([k, \ 1]\)]\  \[Equal] \ 
                         order, \[IndentingNewLine]allstates[\([k, \ 2]\)]\  += 
                         1; \[IndentingNewLine]allstates[\([k, \ 3]\)]\  = \ 
@@ -433,8 +466,8 @@ Cell[BoxData[{
                   flag\  \[Equal] \ 
                     1, \ \[IndentingNewLine]\(Break[];\)\[IndentingNewLine]];\
 \[IndentingNewLine]];\[IndentingNewLine]];\[IndentingNewLine]]; \
-\[IndentingNewLine]allstates\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
-    \)\), "\[IndentingNewLine]", 
+\[IndentingNewLine]allstates\[IndentingNewLine]];\)\[IndentingNewLine]\), "\
+\[IndentingNewLine]", 
     \(\(ClearAll[LinAutAn];\)\), "\[IndentingNewLine]", 
     \(\(LinAutAn[A_, \ B_, \ 
           n_]\  := \ \[IndentingNewLine]Module[{i, \ tmp, \ lf, \ chp, \ 
@@ -464,9 +497,9 @@ Cell[BoxData[{
 \[IndentingNewLine]Print["\<Period: \>", \ 
               x]; \[IndentingNewLine]Print["\<Number of cycles:  \>", \ 
               y\ /\ x]; \[IndentingNewLine]Print["\<CharPolyS: \>", \ 
-              Counted[
-                z]]; \[IndentingNewLine]Print["\<-----------------------\>"];\
-\[IndentingNewLine]]; \[IndentingNewLine]Print[
+              Counted[z]]; \
+\[IndentingNewLine]Print["\<-----------------------\>"];\[IndentingNewLine]]; \
+\[IndentingNewLine]Print[
             allelements\  \[Equal] \ 2^n];\[IndentingNewLine]];\)\)}], "Input"],
 
 Cell[BoxData[{
@@ -492,6 +525,16 @@ Cell[BoxData[{
     \(\(B1 = {1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 
           1};\)\), "\[IndentingNewLine]", 
     \(\(n\  = \ Length[B1];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CharPoly[A1, 19]\)], "Input"],
+
+Cell[BoxData[
+    \(1 + x + x\^4 + x\^6 + x\^7 + x\^8 + x\^9 + x\^10 + x\^13 + x\^15 + 
+      x\^16 + x\^19\)], "Output"]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -697,15 +740,15 @@ Cell[BoxData[
     \("Poly: "\)], "Print"],
 
 Cell[BoxData[
-    \(1 + x\^3 + x\^4 + x\^6 + x\^9 + x\^10 + x\^11 + x\^12 + x\^13 + x\^15 + 
-      x\^18 + x\^19\)], "Print"],
+    \(1 + x + x\^4 + x\^6 + x\^7 + x\^8 + x\^9 + x\^10 + x\^13 + x\^15 + 
+      x\^16 + x\^19\)], "Print"],
 
 Cell[BoxData[
     \("Factorization?: "\)], "Print"],
 
 Cell[BoxData[
-    \(\((1 + x)\)\^2\ \((1 + x\^2 + x\^3)\)\ \((1 + x\^5 + x\^6 + x\^8 + 
-          x\^9 + x\^10 + x\^11 + x\^12 + x\^14)\)\)], "Print"],
+    \(\((1 + x)\)\^2\ \((1 + x + x\^3)\)\ \((1 + x\^2 + x\^3 + x\^4 + x\^5 + 
+          x\^6 + x\^8 + x\^9 + x\^14)\)\)], "Print"],
 
 Cell[BoxData[
     \("Cycle structure: "\)], "Print"],
@@ -761,16 +804,14 @@ Cell[BoxData[
       Editable->False]], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x\^2 + x\^3, 
-            1}, {\((1 + x)\)\ \((1 + x\^2 + x\^3)\), 1}}\),
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^3, 
+            1}, {\((1 + x)\)\ \((1 + x + x\^3)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
-        Plus[ 1, 
-          Power[ x, 2], 
+        Plus[ 1, x, 
           Power[ x, 3]], 1}, {
         Times[ 
           Plus[ 1, x], 
-          Plus[ 1, 
-            Power[ x, 2], 
+          Plus[ 1, x, 
             Power[ x, 3]]], 1}}],
       Editable->False]], "Print"],
 
@@ -789,13 +830,12 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x)\)\^2\ \((1 \
-+ x\^2 + x\^3)\), 1}}\),
++ x + x\^3)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Power[ 
             Plus[ 1, x], 2], 
-          Plus[ 1, 
-            Power[ x, 2], 
+          Plus[ 1, x, 
             Power[ x, 3]]], 1}}],
       Editable->False]], "Print"],
 
@@ -814,30 +854,29 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x)\)\ \((1 + 
-                  x\^5 + x\^6 + x\^8 + x\^9 + x\^10 + x\^11 + x\^12 + 
-                  x\^14)\), 
-            1}, {1 + x\^5 + x\^6 + x\^8 + x\^9 + x\^10 + x\^11 + x\^12 + 
-              x\^14, 1}}\),
+                  x\^2 + x\^3 + x\^4 + x\^5 + x\^6 + x\^8 + x\^9 + x\^14)\), 
+            1}, {1 + x\^2 + x\^3 + x\^4 + x\^5 + x\^6 + x\^8 + x\^9 + x\^14, 
+            1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Plus[ 1, x], 
           Plus[ 1, 
+            Power[ x, 2], 
+            Power[ x, 3], 
+            Power[ x, 4], 
             Power[ x, 5], 
             Power[ x, 6], 
             Power[ x, 8], 
             Power[ x, 9], 
-            Power[ x, 10], 
-            Power[ x, 11], 
-            Power[ x, 12], 
             Power[ x, 14]]], 1}, {
         Plus[ 1, 
+          Power[ x, 2], 
+          Power[ x, 3], 
+          Power[ x, 4], 
           Power[ x, 5], 
           Power[ x, 6], 
           Power[ x, 8], 
           Power[ x, 9], 
-          Power[ x, 10], 
-          Power[ x, 11], 
-          Power[ x, 12], 
           Power[ x, 14]], 1}}],
       Editable->False]], "Print"],
 
@@ -856,19 +895,19 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x)\)\^2\ \((1 \
-+ x\^5 + x\^6 + x\^8 + x\^9 + x\^10 + x\^11 + x\^12 + x\^14)\), 1}}\),
++ x\^2 + x\^3 + x\^4 + x\^5 + x\^6 + x\^8 + x\^9 + x\^14)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Power[ 
             Plus[ 1, x], 2], 
           Plus[ 1, 
+            Power[ x, 2], 
+            Power[ x, 3], 
+            Power[ x, 4], 
             Power[ x, 5], 
             Power[ x, 6], 
             Power[ x, 8], 
             Power[ x, 9], 
-            Power[ x, 10], 
-            Power[ x, 11], 
-            Power[ x, 12], 
             Power[ x, 14]]], 1}}],
       Editable->False]], "Print"],
 
@@ -886,38 +925,36 @@ Cell[BoxData[
       Editable->False]], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x\^2 + 
-                  x\^3)\)\ \((1 + x\^5 + x\^6 + x\^8 + x\^9 + x\^10 + x\^11 + 
-                  x\^12 + x\^14)\), 
-            1}, {\((1 + x)\)\ \((1 + x\^2 + x\^3)\)\ \((1 + x\^5 + x\^6 + 
-                  x\^8 + x\^9 + x\^10 + x\^11 + x\^12 + x\^14)\), 1}}\),
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x + 
+                  x\^3)\)\ \((1 + x\^2 + x\^3 + x\^4 + x\^5 + x\^6 + x\^8 + 
+                  x\^9 + x\^14)\), 
+            1}, {\((1 + x)\)\ \((1 + x + x\^3)\)\ \((1 + x\^2 + x\^3 + x\^4 + 
+                  x\^5 + x\^6 + x\^8 + x\^9 + x\^14)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
-          Plus[ 1, 
-            Power[ x, 2], 
+          Plus[ 1, x, 
             Power[ x, 3]], 
           Plus[ 1, 
+            Power[ x, 2], 
+            Power[ x, 3], 
+            Power[ x, 4], 
             Power[ x, 5], 
             Power[ x, 6], 
             Power[ x, 8], 
             Power[ x, 9], 
-            Power[ x, 10], 
-            Power[ x, 11], 
-            Power[ x, 12], 
             Power[ x, 14]]], 1}, {
         Times[ 
           Plus[ 1, x], 
-          Plus[ 1, 
-            Power[ x, 2], 
+          Plus[ 1, x, 
             Power[ x, 3]], 
           Plus[ 1, 
+            Power[ x, 2], 
+            Power[ x, 3], 
+            Power[ x, 4], 
             Power[ x, 5], 
             Power[ x, 6], 
             Power[ x, 8], 
             Power[ x, 9], 
-            Power[ x, 10], 
-            Power[ x, 11], 
-            Power[ x, 12], 
             Power[ x, 14]]], 1}}],
       Editable->False]], "Print"],
 
@@ -936,23 +973,22 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x)\)\^2\ \((1 \
-+ x\^2 + x\^3)\)\ \((1 + x\^5 + x\^6 + x\^8 + x\^9 + x\^10 + x\^11 + x\^12 + 
++ x + x\^3)\)\ \((1 + x\^2 + x\^3 + x\^4 + x\^5 + x\^6 + x\^8 + x\^9 + 
                   x\^14)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Power[ 
             Plus[ 1, x], 2], 
-          Plus[ 1, 
-            Power[ x, 2], 
+          Plus[ 1, x, 
             Power[ x, 3]], 
           Plus[ 1, 
+            Power[ x, 2], 
+            Power[ x, 3], 
+            Power[ x, 4], 
             Power[ x, 5], 
             Power[ x, 6], 
             Power[ x, 8], 
             Power[ x, 9], 
-            Power[ x, 10], 
-            Power[ x, 11], 
-            Power[ x, 12], 
             Power[ x, 14]]], 1}}],
       Editable->False]], "Print"],
 
@@ -1082,15 +1118,15 @@ Cell[BoxData[
     \("Poly: "\)], "Print"],
 
 Cell[BoxData[
-    \(1 + x\^2 + x\^4 + x\^5 + x\^6 + x\^10 + x\^13 + x\^15 + x\^16 + x\^17 + 
-      x\^18 + x\^19\)], "Print"],
+    \(1 + x + x\^2 + x\^3 + x\^4 + x\^6 + x\^9 + x\^13 + x\^14 + x\^15 + 
+      x\^17 + x\^19\)], "Print"],
 
 Cell[BoxData[
     \("Factorization?: "\)], "Print"],
 
 Cell[BoxData[
-    \(\((1 + x)\)\ \((1 + x + x\^2 + x\^3 + x\^4)\)\ \((1 + x + 
-          x\^6)\)\ \((1 + x + x\^4 + x\^5 + x\^6 + x\^7 + x\^8)\)\)], "Print"],
+    \(\((1 + x)\)\ \((1 + x + x\^2 + x\^3 + x\^4)\)\ \((1 + x\^5 + 
+          x\^6)\)\ \((1 + x + x\^2 + x\^3 + x\^4 + x\^7 + x\^8)\)\)], "Print"],
 
 Cell[BoxData[
     \("Cycle structure: "\)], "Print"],
@@ -1147,13 +1183,13 @@ Cell[BoxData[
       Editable->False]], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^4 + x\^5 + 
-              x\^6 + x\^7 + x\^8, 1}}\),
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^2 + x\^3 + 
+              x\^4 + x\^7 + x\^8, 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Plus[ 1, x, 
+          Power[ x, 2], 
+          Power[ x, 3], 
           Power[ x, 4], 
-          Power[ x, 5], 
-          Power[ x, 6], 
           Power[ x, 7], 
           Power[ x, 8]], 1}}],
       Editable->False]], "Print"],
@@ -1172,9 +1208,11 @@ Cell[BoxData[
       Editable->False]], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x + x\^6, 1}}\),
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{1 + x\^5 + x\^6, 
+            1}}\),
       SequenceForm[ "CharPolyS: ", {{
-        Plus[ 1, x, 
+        Plus[ 1, 
+          Power[ x, 5], 
           Power[ x, 6]], 1}}],
       Editable->False]], "Print"],
 
@@ -1193,7 +1231,7 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x + x\^2 + 
-                  x\^3 + x\^4)\)\ \((1 + x + x\^4 + x\^5 + x\^6 + x\^7 + 
+                  x\^3 + x\^4)\)\ \((1 + x + x\^2 + x\^3 + x\^4 + x\^7 + 
                   x\^8)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
@@ -1202,9 +1240,9 @@ Cell[BoxData[
             Power[ x, 3], 
             Power[ x, 4]], 
           Plus[ 1, x, 
+            Power[ x, 2], 
+            Power[ x, 3], 
             Power[ x, 4], 
-            Power[ x, 5], 
-            Power[ x, 6], 
             Power[ x, 7], 
             Power[ x, 8]]], 1}}],
       Editable->False]], "Print"],
@@ -1224,14 +1262,15 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x + x\^2 + 
-                  x\^3 + x\^4)\)\ \((1 + x + x\^6)\), 1}}\),
+                  x\^3 + x\^4)\)\ \((1 + x\^5 + x\^6)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Plus[ 1, x, 
             Power[ x, 2], 
             Power[ x, 3], 
             Power[ x, 4]], 
-          Plus[ 1, x, 
+          Plus[ 1, 
+            Power[ x, 5], 
             Power[ x, 6]]], 1}}],
       Editable->False]], "Print"],
 
@@ -1249,17 +1288,18 @@ Cell[BoxData[
       Editable->False]], "Print"],
 
 Cell[BoxData[
-    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x + 
-                  x\^6)\)\ \((1 + x + x\^4 + x\^5 + x\^6 + x\^7 + x\^8)\), 
+    InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x\^5 + 
+                  x\^6)\)\ \((1 + x + x\^2 + x\^3 + x\^4 + x\^7 + x\^8)\), 
             1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
-          Plus[ 1, x, 
+          Plus[ 1, 
+            Power[ x, 5], 
             Power[ x, 6]], 
           Plus[ 1, x, 
+            Power[ x, 2], 
+            Power[ x, 3], 
             Power[ x, 4], 
-            Power[ x, 5], 
-            Power[ x, 6], 
             Power[ x, 7], 
             Power[ x, 8]]], 1}}],
       Editable->False]], "Print"],
@@ -1279,20 +1319,21 @@ Cell[BoxData[
 
 Cell[BoxData[
     InterpretationBox[\("CharPolyS: "\[InvisibleSpace]{{\((1 + x + x\^2 + 
-                  x\^3 + x\^4)\)\ \((1 + x + x\^6)\)\ \((1 + x + x\^4 + 
-                  x\^5 + x\^6 + x\^7 + x\^8)\), 1}}\),
+                  x\^3 + x\^4)\)\ \((1 + x\^5 + x\^6)\)\ \((1 + x + x\^2 + 
+                  x\^3 + x\^4 + x\^7 + x\^8)\), 1}}\),
       SequenceForm[ "CharPolyS: ", {{
         Times[ 
           Plus[ 1, x, 
             Power[ x, 2], 
             Power[ x, 3], 
             Power[ x, 4]], 
-          Plus[ 1, x, 
+          Plus[ 1, 
+            Power[ x, 5], 
             Power[ x, 6]], 
           Plus[ 1, x, 
+            Power[ x, 2], 
+            Power[ x, 3], 
             Power[ x, 4], 
-            Power[ x, 5], 
-            Power[ x, 6], 
             Power[ x, 7], 
             Power[ x, 8]]], 1}}],
       Editable->False]], "Print"],
@@ -1328,155 +1369,170 @@ CellTagsIndex->{}
 
 (*NotebookFileOutline
 Notebook[{
-Cell[1754, 51, 3247, 60, 1110, "Input"],
+Cell[1754, 51, 3359, 61, 1170, "Input"],
 
 Cell[CellGroupData[{
-Cell[5026, 115, 483, 8, 150, "Input"],
-Cell[5512, 125, 53, 1, 29, "Output"],
-Cell[5568, 128, 68, 1, 29, "Output"],
-Cell[5639, 131, 1028, 29, 25, "Print"]
+Cell[5138, 116, 519, 9, 150, "Input"],
+Cell[5660, 127, 46, 1, 29, "Output"],
+Cell[5709, 130, 53, 1, 29, "Output"],
+Cell[5765, 133, 68, 1, 29, "Output"],
+Cell[5836, 136, 1028, 29, 25, "Print"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6704, 165, 151, 2, 50, "Input"],
-Cell[6858, 169, 70, 1, 29, "Output"]
+Cell[6901, 170, 149, 2, 50, "Input"],
+Cell[7053, 174, 131, 2, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6965, 175, 125, 3, 30, "Input"],
-Cell[7093, 180, 70, 1, 29, "Output"]
+Cell[7221, 181, 127, 3, 30, "Input"],
+Cell[7351, 186, 79, 1, 29, "Output"]
 }, Open  ]],
-Cell[7178, 184, 1032, 18, 330, "Input"],
+Cell[7445, 190, 1173, 20, 390, "Input"],
 
 Cell[CellGroupData[{
-Cell[8235, 206, 220, 4, 70, "Input"],
-Cell[8458, 212, 53, 1, 29, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[8548, 218, 512, 11, 110, "Input"],
-Cell[9063, 231, 38, 1, 29, "Output"]
+Cell[8643, 214, 220, 4, 70, "Input"],
+Cell[8866, 220, 53, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[9138, 237, 520, 11, 110, "Input"],
-Cell[9661, 250, 38, 1, 29, "Output"]
+Cell[8956, 226, 485, 11, 110, "Input"],
+Cell[9444, 239, 61, 1, 43, "Output"],
+Cell[9508, 242, 46, 1, 29, "Output"],
+Cell[9557, 245, 61, 1, 43, "Output"],
+Cell[9621, 248, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[9736, 256, 636, 13, 130, "Input"],
-Cell[10375, 271, 38, 1, 29, "Output"]
+Cell[9696, 254, 493, 11, 110, "Input"],
+Cell[10192, 267, 53, 1, 43, "Output"],
+Cell[10248, 270, 46, 1, 29, "Output"],
+Cell[10297, 273, 53, 1, 43, "Output"],
+Cell[10353, 276, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[10450, 277, 57, 1, 30, "Input"],
-Cell[10510, 280, 138, 3, 29, "Output"]
-}, Open  ]],
-Cell[10663, 286, 10074, 183, 3390, "Input"],
-Cell[20740, 471, 1552, 22, 250, "Input"],
-
-Cell[CellGroupData[{
-Cell[22317, 497, 55, 1, 30, "Input"],
-Cell[22375, 500, 91, 1, 29, "Output"]
+Cell[10428, 282, 609, 13, 130, "Input"],
+Cell[11040, 297, 75, 1, 45, "Output"],
+Cell[11118, 300, 46, 1, 29, "Output"],
+Cell[11167, 303, 75, 1, 45, "Output"],
+Cell[11245, 306, 38, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[22503, 506, 51, 1, 30, "Input"],
-Cell[22557, 509, 2857, 77, 25, "Print"]
+Cell[11320, 312, 57, 1, 30, "Input"],
+Cell[11380, 315, 201, 3, 29, "Output"]
+}, Open  ]],
+Cell[11596, 321, 9991, 181, 3350, "Input"],
+Cell[21590, 504, 1552, 22, 250, "Input"],
+
+Cell[CellGroupData[{
+Cell[23167, 530, 49, 1, 30, "Input"],
+Cell[23219, 533, 121, 2, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[25451, 591, 570, 11, 150, "Input"],
-Cell[26024, 604, 38, 1, 29, "Output"]
+Cell[23377, 540, 55, 1, 30, "Input"],
+Cell[23435, 543, 91, 1, 29, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[26099, 610, 56, 1, 30, "Input"],
-Cell[26158, 613, 53, 1, 25, "Print"],
-Cell[26214, 616, 2857, 77, 25, "Print"],
-Cell[29074, 695, 41, 1, 25, "Print"],
-Cell[29118, 698, 125, 2, 25, "Print"],
-Cell[29246, 702, 51, 1, 25, "Print"],
-Cell[29300, 705, 150, 2, 25, "Print"],
-Cell[29453, 709, 52, 1, 25, "Print"],
-Cell[29508, 712, 139, 3, 25, "Print"],
-Cell[29650, 717, 161, 3, 25, "Print"],
-Cell[29814, 722, 198, 4, 25, "Print"],
-Cell[30015, 728, 58, 1, 25, "Print"],
-Cell[30076, 731, 139, 3, 25, "Print"],
-Cell[30218, 736, 161, 3, 25, "Print"],
-Cell[30382, 741, 220, 6, 25, "Print"],
-Cell[30605, 749, 58, 1, 25, "Print"],
-Cell[30666, 752, 139, 3, 25, "Print"],
-Cell[30808, 757, 161, 3, 25, "Print"],
-Cell[30972, 762, 414, 12, 25, "Print"],
-Cell[31389, 776, 58, 1, 25, "Print"],
-Cell[31450, 779, 141, 3, 25, "Print"],
-Cell[31594, 784, 161, 3, 25, "Print"],
-Cell[31758, 789, 334, 10, 25, "Print"],
-Cell[32095, 801, 58, 1, 25, "Print"],
-Cell[32156, 804, 147, 3, 25, "Print"],
-Cell[32306, 809, 161, 3, 25, "Print"],
-Cell[32470, 814, 879, 27, 25, "Print"],
-Cell[33352, 843, 58, 1, 25, "Print"],
-Cell[33413, 846, 147, 3, 25, "Print"],
-Cell[33563, 851, 161, 3, 25, "Print"],
-Cell[33727, 856, 546, 16, 25, "Print"],
-Cell[34276, 874, 58, 1, 25, "Print"],
-Cell[34337, 877, 149, 3, 25, "Print"],
-Cell[34489, 882, 161, 3, 25, "Print"],
-Cell[34653, 887, 1120, 34, 44, "Print"],
-Cell[35776, 923, 58, 1, 25, "Print"],
-Cell[35837, 926, 149, 3, 25, "Print"],
-Cell[35989, 931, 161, 3, 25, "Print"],
-Cell[36153, 936, 663, 20, 25, "Print"],
-Cell[36819, 958, 58, 1, 25, "Print"],
-Cell[36880, 961, 37, 1, 25, "Print"]
+Cell[23563, 549, 51, 1, 30, "Input"],
+Cell[23617, 552, 2857, 77, 25, "Print"]
 }, Open  ]],
-Cell[36932, 965, 1666, 26, 250, "Input"],
 
 Cell[CellGroupData[{
-Cell[38623, 995, 68, 1, 30, "Input"],
-Cell[38694, 998, 53, 1, 25, "Print"],
-Cell[38750, 1001, 2857, 77, 25, "Print"],
-Cell[41610, 1080, 41, 1, 25, "Print"],
-Cell[41654, 1083, 125, 2, 25, "Print"],
-Cell[41782, 1087, 51, 1, 25, "Print"],
-Cell[41836, 1090, 157, 2, 25, "Print"],
-Cell[41996, 1094, 52, 1, 25, "Print"],
-Cell[42051, 1097, 139, 3, 25, "Print"],
-Cell[42193, 1102, 161, 3, 25, "Print"],
-Cell[42357, 1107, 159, 3, 25, "Print"],
-Cell[42519, 1112, 58, 1, 25, "Print"],
-Cell[42580, 1115, 139, 3, 25, "Print"],
-Cell[42722, 1120, 161, 3, 25, "Print"],
-Cell[42886, 1125, 293, 8, 25, "Print"],
-Cell[43182, 1135, 58, 1, 25, "Print"],
-Cell[43243, 1138, 141, 3, 25, "Print"],
-Cell[43387, 1143, 163, 3, 25, "Print"],
-Cell[43553, 1148, 357, 10, 25, "Print"],
-Cell[43913, 1160, 58, 1, 25, "Print"],
-Cell[43974, 1163, 141, 3, 25, "Print"],
-Cell[44118, 1168, 161, 3, 25, "Print"],
-Cell[44282, 1173, 214, 5, 25, "Print"],
-Cell[44499, 1180, 58, 1, 25, "Print"],
-Cell[44560, 1183, 143, 3, 25, "Print"],
-Cell[44706, 1188, 163, 3, 25, "Print"],
-Cell[44872, 1193, 554, 16, 25, "Print"],
-Cell[45429, 1211, 58, 1, 25, "Print"],
-Cell[45490, 1214, 143, 3, 25, "Print"],
-Cell[45636, 1219, 161, 3, 25, "Print"],
-Cell[45800, 1224, 399, 11, 25, "Print"],
-Cell[46202, 1237, 58, 1, 25, "Print"],
-Cell[46263, 1240, 145, 3, 25, "Print"],
-Cell[46411, 1245, 163, 3, 25, "Print"],
-Cell[46577, 1250, 480, 14, 25, "Print"],
-Cell[47060, 1266, 58, 1, 25, "Print"],
-Cell[47121, 1269, 145, 3, 25, "Print"],
-Cell[47269, 1274, 163, 3, 25, "Print"],
-Cell[47435, 1279, 625, 18, 25, "Print"],
-Cell[48063, 1299, 58, 1, 25, "Print"],
-Cell[48124, 1302, 37, 1, 25, "Print"]
+Cell[26511, 634, 570, 11, 150, "Input"],
+Cell[27084, 647, 38, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[27159, 653, 56, 1, 30, "Input"],
+Cell[27218, 656, 53, 1, 25, "Print"],
+Cell[27274, 659, 2857, 77, 25, "Print"],
+Cell[30134, 738, 41, 1, 25, "Print"],
+Cell[30178, 741, 120, 2, 25, "Print"],
+Cell[30301, 745, 51, 1, 25, "Print"],
+Cell[30355, 748, 144, 2, 25, "Print"],
+Cell[30502, 752, 52, 1, 25, "Print"],
+Cell[30557, 755, 139, 3, 25, "Print"],
+Cell[30699, 760, 161, 3, 25, "Print"],
+Cell[30863, 765, 198, 4, 25, "Print"],
+Cell[31064, 771, 58, 1, 25, "Print"],
+Cell[31125, 774, 139, 3, 25, "Print"],
+Cell[31267, 779, 161, 3, 25, "Print"],
+Cell[31431, 784, 220, 6, 25, "Print"],
+Cell[31654, 792, 58, 1, 25, "Print"],
+Cell[31715, 795, 139, 3, 25, "Print"],
+Cell[31857, 800, 161, 3, 25, "Print"],
+Cell[32021, 805, 362, 10, 25, "Print"],
+Cell[32386, 817, 58, 1, 25, "Print"],
+Cell[32447, 820, 141, 3, 25, "Print"],
+Cell[32591, 825, 161, 3, 25, "Print"],
+Cell[32755, 830, 307, 9, 25, "Print"],
+Cell[33065, 841, 58, 1, 25, "Print"],
+Cell[33126, 844, 147, 3, 25, "Print"],
+Cell[33276, 849, 161, 3, 25, "Print"],
+Cell[33440, 854, 846, 26, 25, "Print"],
+Cell[34289, 882, 58, 1, 25, "Print"],
+Cell[34350, 885, 147, 3, 25, "Print"],
+Cell[34500, 890, 161, 3, 25, "Print"],
+Cell[34664, 895, 540, 16, 25, "Print"],
+Cell[35207, 913, 58, 1, 25, "Print"],
+Cell[35268, 916, 149, 3, 25, "Print"],
+Cell[35420, 921, 161, 3, 25, "Print"],
+Cell[35584, 926, 1054, 32, 25, "Print"],
+Cell[36641, 960, 58, 1, 25, "Print"],
+Cell[36702, 963, 149, 3, 25, "Print"],
+Cell[36854, 968, 161, 3, 25, "Print"],
+Cell[37018, 973, 630, 19, 25, "Print"],
+Cell[37651, 994, 58, 1, 25, "Print"],
+Cell[37712, 997, 37, 1, 25, "Print"]
+}, Open  ]],
+Cell[37764, 1001, 1666, 26, 250, "Input"],
+
+Cell[CellGroupData[{
+Cell[39455, 1031, 68, 1, 30, "Input"],
+Cell[39526, 1034, 53, 1, 25, "Print"],
+Cell[39582, 1037, 2857, 77, 25, "Print"],
+Cell[42442, 1116, 41, 1, 25, "Print"],
+Cell[42486, 1119, 120, 2, 25, "Print"],
+Cell[42609, 1123, 51, 1, 25, "Print"],
+Cell[42663, 1126, 160, 2, 25, "Print"],
+Cell[42826, 1130, 52, 1, 25, "Print"],
+Cell[42881, 1133, 139, 3, 25, "Print"],
+Cell[43023, 1138, 161, 3, 25, "Print"],
+Cell[43187, 1143, 159, 3, 25, "Print"],
+Cell[43349, 1148, 58, 1, 25, "Print"],
+Cell[43410, 1151, 139, 3, 25, "Print"],
+Cell[43552, 1156, 161, 3, 25, "Print"],
+Cell[43716, 1161, 293, 8, 25, "Print"],
+Cell[44012, 1171, 58, 1, 25, "Print"],
+Cell[44073, 1174, 141, 3, 25, "Print"],
+Cell[44217, 1179, 163, 3, 25, "Print"],
+Cell[44383, 1184, 357, 10, 25, "Print"],
+Cell[44743, 1196, 58, 1, 25, "Print"],
+Cell[44804, 1199, 141, 3, 25, "Print"],
+Cell[44948, 1204, 161, 3, 25, "Print"],
+Cell[45112, 1209, 252, 7, 25, "Print"],
+Cell[45367, 1218, 58, 1, 25, "Print"],
+Cell[45428, 1221, 143, 3, 25, "Print"],
+Cell[45574, 1226, 163, 3, 25, "Print"],
+Cell[45740, 1231, 554, 16, 25, "Print"],
+Cell[46297, 1249, 58, 1, 25, "Print"],
+Cell[46358, 1252, 143, 3, 25, "Print"],
+Cell[46504, 1257, 161, 3, 25, "Print"],
+Cell[46668, 1262, 426, 12, 25, "Print"],
+Cell[47097, 1276, 58, 1, 25, "Print"],
+Cell[47158, 1279, 145, 3, 25, "Print"],
+Cell[47306, 1284, 163, 3, 25, "Print"],
+Cell[47472, 1289, 507, 15, 25, "Print"],
+Cell[47982, 1306, 58, 1, 25, "Print"],
+Cell[48043, 1309, 145, 3, 25, "Print"],
+Cell[48191, 1314, 163, 3, 25, "Print"],
+Cell[48357, 1319, 652, 19, 25, "Print"],
+Cell[49012, 1340, 58, 1, 25, "Print"],
+Cell[49073, 1343, 37, 1, 25, "Print"]
 }, Open  ]]
 }
 ]
