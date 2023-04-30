@@ -1,0 +1,455 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.0'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     13559,        361]*)
+(*NotebookOutlinePosition[     14225,        384]*)
+(*  CellTagsIndexPosition[     14181,        380]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[{
+    \(\(ClearAll[gcd];\)\), "\[IndentingNewLine]", 
+    \(\(gcd[a_, \ 
+          b_] := \ \[IndentingNewLine]Module[{res, \ ra, \ rb, \ 
+            tmp}, \[IndentingNewLine]res\  = \ 1; \[IndentingNewLine]ra\  = \ 
+            a; \[IndentingNewLine]rb\  = \ 
+            b; \[IndentingNewLine]\[IndentingNewLine]While[
+            ra\  \[NotEqual] \ rb, \[IndentingNewLine]If[
+              rb\  > \ ra, \[IndentingNewLine]tmp\  = \ 
+                rb; \[IndentingNewLine]rb\  = \ 
+                ra; \[IndentingNewLine]ra\  = \ 
+                tmp;\[IndentingNewLine]]; \[IndentingNewLine]\
+\[IndentingNewLine]If[
+              And[Mod[ra, \ 2]\  \[Equal] \ 0, \ 
+                Mod[rb, \ 2]\  \[Equal] \ 0], \[IndentingNewLine]res\  = 
+                res\ *2; \[IndentingNewLine]ra\  = \ 
+                ra\ /\ 2; \[IndentingNewLine]rb\  = \ 
+                rb\ /\ 2;\[IndentingNewLine], \[IndentingNewLine]\(If[
+                  Mod[ra, \ 2]\  \[Equal] \ 
+                    0, \[IndentingNewLine]\(ra\  = \ 
+                      ra\ /\ 2;\)\[IndentingNewLine], \[IndentingNewLine]\(If[
+                      Mod[rb, \ 2]\  \[Equal] \ 
+                        0, \[IndentingNewLine]\(rb\  = \ 
+                          rb\ /\ 
+                            2;\)\[IndentingNewLine], \[IndentingNewLine]\(ra\ \
+ = \ \((ra\  - \ rb)\)\ /\ 
+                            2;\)\[IndentingNewLine]];\)\[IndentingNewLine]];\)\
+\[IndentingNewLine]];\[IndentingNewLine]]; \[IndentingNewLine]res\ *\ 
+            ra\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(a\  = \ Random[Integer, \ {0, \ 1000}];\)\), "\[IndentingNewLine]", 
+    \(\(b\  = \ Random[Integer, \ {0, \ 1000}];\)\), "\[IndentingNewLine]", 
+    \(gcd[17\ *\ a, \ 17\ *\ b]\  \[Equal] \ 
+      GCD[17\ *\ a, \ 17\ *\ b]\)}], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[FastPow];\)\), "\[IndentingNewLine]", 
+    \(\(\(FastPow[g_, \ x_, \ 
+          p_] := \[IndentingNewLine]Module[{tmp, \ bin, \ res, \ 
+            i}, \[IndentingNewLine]bin\  = \ 
+            IntegerDigits[x, \ 2]; \[IndentingNewLine]res\ \  = \ 
+            g; \[IndentingNewLine]For[i\  = \ 2, \ 
+            i\  \[LessEqual] \ 
+              Length[bin], \ \(i++\), \[IndentingNewLine]res\  = \ 
+              Mod[res\ *\ res, \ p]; \[IndentingNewLine]If[
+              bin[\([i]\)]\  \[Equal] \ 
+                1, \[IndentingNewLine]\(res\  = \ 
+                  Mod[res\ *\ g, \ 
+                    p];\)\[IndentingNewLine]];\[IndentingNewLine]]; \
+\[IndentingNewLine]res\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[IsSquare];\)\), "\[IndentingNewLine]", 
+    \(\(IsSquare[n_, \ 
+          primes_]\  := \[IndentingNewLine]Module[{tmp, \ i, \ p, \ 
+            flag}, \[IndentingNewLine]flag\  = \ True; \[IndentingNewLine]For[
+            i\  = \ 1, \ 
+            i\  < \ Length[primes], \ \(i++\), \[IndentingNewLine]p\  = \ 
+              primes[\([i]\)]; \[IndentingNewLine]If[
+              FastPow[n, \ \((p - 1)\)/2, \ p]\  \[Equal] \ 
+                p\  - \ 1, \[IndentingNewLine]flag\  = \ 
+                False; \[IndentingNewLine]Break[];\[IndentingNewLine]];\
+\[IndentingNewLine]]; \[IndentingNewLine]flag\[IndentingNewLine]];\)\)}], \
+"Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(primes\  = \ {3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 
+          53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 
+          127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 
+          193, 197, 199};\)\), "\[IndentingNewLine]", 
+    \(\(x\  = \ 
+        Random[Integer, \ {0, \ 
+            10000000000000}];\)\), "\[IndentingNewLine]", 
+    \(IsSquare[x, \ primes]\), "\[IndentingNewLine]", 
+    \(IsSquare[x*x, \ primes]\)}], "Input"],
+
+Cell[BoxData[
+    \(False\)], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[FermattFactor];\)\), "\[IndentingNewLine]", 
+    \(\(FermattFactor[n_, \ 
+          primes_]\  := \[IndentingNewLine]Module[{tmp, \ u, \ v, \ p, \ 
+            q}, \[IndentingNewLine]v\  = \ 1; \[IndentingNewLine]While[
+            Not[IsSquare[n\  + \ v*v, \ 
+                primes]], \[IndentingNewLine]\(v\  += \ 
+                1;\)\[IndentingNewLine]]; \[IndentingNewLine]u\  = \ 
+            Sqrt[n\  + \ v*v]; \[IndentingNewLine]p\  = \ 
+            u\  + \ v; \[IndentingNewLine]q\  = \ 
+            u\  - v; \[IndentingNewLine]{u, \ v, \ p, \ 
+            q}\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(n1\  = \ 240316062981161;\)\), "\[IndentingNewLine]", 
+    \(\(n2\  = \ 240317584752391;\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(res\  = \ FermattFactor[n1, \ primes];\)\), "\[IndentingNewLine]", 
+    \(\(u\  = \ res[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(v\  = \ res[\([2]\)];\)\), "\[IndentingNewLine]", 
+    \(\(p\  = \ res[\([3]\)];\)\), "\[IndentingNewLine]", 
+    \(\(q\  = \ res[\([4]\)];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<u = \>", \ u];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<v = \>", \ v];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<p = \>", \ p];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<q = \>", \ 
+        q];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(p\ *\ q\  \[Equal] \ n1\), "\[IndentingNewLine]", 
+    \(u\ *\ u\  - \ v\ *\ v\  \[Equal] \ n1\), "\[IndentingNewLine]", 
+    \(And[PrimeQ[p], \ PrimeQ[q]]\)}], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\("u = "\[InvisibleSpace]15502131\),
+      SequenceForm[ "u = ", 15502131],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("v = "\[InvisibleSpace]1600\),
+      SequenceForm[ "v = ", 1600],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("p = "\[InvisibleSpace]15503731\),
+      SequenceForm[ "p = ", 15503731],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("q = "\[InvisibleSpace]15500531\),
+      SequenceForm[ "q = ", 15500531],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(res\  = \ FermattFactor[n2, \ primes];\)\), "\[IndentingNewLine]", 
+    \(\(u\  = \ res[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(v\  = \ res[\([2]\)];\)\), "\[IndentingNewLine]", 
+    \(\(p\  = \ res[\([3]\)];\)\), "\[IndentingNewLine]", 
+    \(\(q\  = \ res[\([4]\)];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<u = \>", \ u];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<v = \>", \ v];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<p = \>", \ p];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<q = \>", \ 
+        q];\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(p\ *\ q\  \[Equal] \ n2\), "\[IndentingNewLine]", 
+    \(u\ *\ u\  - \ v\ *\ v\  \[Equal] \ n2\), "\[IndentingNewLine]", 
+    \(And[PrimeQ[p], \ PrimeQ[q]]\)}], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\("u = "\[InvisibleSpace]15502180\),
+      SequenceForm[ "u = ", 15502180],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("v = "\[InvisibleSpace]3\),
+      SequenceForm[ "v = ", 3],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("p = "\[InvisibleSpace]15502183\),
+      SequenceForm[ "p = ", 15502183],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("q = "\[InvisibleSpace]15502177\),
+      SequenceForm[ "q = ", 15502177],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ClearAll[CharFunc];\)\), "\[IndentingNewLine]", 
+    \(\(\(CharFunc[x_, \ n_]\  := \ 
+        Mod[x\ *\ x\  + \ 7, \ n];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(ClearAll[PollardRho];\)\), "\[IndentingNewLine]", 
+    \(\(PollardRho[
+          n_]\  := \[IndentingNewLine]Module[{tmp, \ x, \ y, \ g, \ p, \ q, \ 
+            i, \ j}, \[IndentingNewLine]a\  = \ 
+            Random[Integer, \ {1, \ 
+                n - 1}]; \[IndentingNewLine]\[IndentingNewLine]x\  = \ 
+            CharFunc[a, \ n]; \[IndentingNewLine]i\  = \ 
+            1; \[IndentingNewLine]y\  = \ 
+            CharFunc[CharFunc[a, \ n], \ n]; \[IndentingNewLine]j\  = \ 
+            2; \[IndentingNewLine]If[
+            x\  > \ y, \[IndentingNewLine]\(tmp\  = \ \ x - \ 
+                  y;\), \[IndentingNewLine]\(tmp\  = \ 
+                y\  - \ x;\)\[IndentingNewLine]]; \[IndentingNewLine]g\  = \ 
+            gcd[tmp, \ n]; \[IndentingNewLine]While[
+            Or[g\  \[Equal] \ 1, 
+              g\  \[Equal] \ n], \[IndentingNewLine]x\  = \ 
+              CharFunc[x, \ n]; \[IndentingNewLine]y\  = \ 
+              CharFunc[CharFunc[y, \ n], \ n]; \[IndentingNewLine]i\  += \ 
+              1; \[IndentingNewLine]j\  += \ 2; \[IndentingNewLine]If[
+              x\  > \ y, \[IndentingNewLine]\(tmp\  = \ \ x - \ 
+                    y;\), \[IndentingNewLine]\(tmp\  = \ 
+                  y\  - \ 
+                    x;\)\[IndentingNewLine]]; \[IndentingNewLine]g\  = \ 
+              gcd[tmp, \ n];\[IndentingNewLine]]; \[IndentingNewLine]p\  = \ 
+            g; \[IndentingNewLine]q\  = \ n\ /\ p; \[IndentingNewLine]{p, \ 
+            q, \ j\  - \ i}\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
+    \(\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(n1\  = \ 22122335181319;\)\), "\[IndentingNewLine]", 
+    \(\(n2 = \ 22341667061281;\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(res\  = \ PollardRho[n1];\)\), "\[IndentingNewLine]", 
+    \(\(p\  = \ res[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(q\  = \ res[\([2]\)];\)\), "\[IndentingNewLine]", 
+    \(\(len\  = \ res[\([3]\)];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<p = \>", \ p];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<q = \>", \ q];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<Len = \>", \ len];\)\), "\[IndentingNewLine]", 
+    \(p\ *\ q\  \[Equal] \ n1\)}], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\("p = "\[InvisibleSpace]1427047\),
+      SequenceForm[ "p = ", 1427047],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("q = "\[InvisibleSpace]15502177\),
+      SequenceForm[ "q = ", 15502177],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Len = "\[InvisibleSpace]2401\),
+      SequenceForm[ "Len = ", 2401],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(res\  = \ PollardRho[n2];\)\), "\[IndentingNewLine]", 
+    \(\(p\  = \ res[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(q\  = \ res[\([2]\)];\)\), "\[IndentingNewLine]", 
+    \(\(len\  = \ res[\([3]\)];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<p = \>", \ p];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<q = \>", \ q];\)\), "\[IndentingNewLine]", 
+    \(\(Print["\<Len = \>", \ len];\)\), "\[IndentingNewLine]", 
+    \(p\ *\ q\  \[Equal] \ n2\)}], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[\("p = "\[InvisibleSpace]1441051\),
+      SequenceForm[ "p = ", 1441051],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("q = "\[InvisibleSpace]15503731\),
+      SequenceForm[ "q = ", 15503731],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("Len = "\[InvisibleSpace]837\),
+      SequenceForm[ "Len = ", 837],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(PrimeQ[p]\)], "Input"],
+
+Cell[BoxData[
+    \(True\)], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.0 for Microsoft Windows",
+ScreenRectangle->{{0, 2136}, {0, 1361}},
+WindowSize->{1334, 766},
+WindowMargins->{{-3, Automatic}, {Automatic, 0}},
+Magnification->1.5
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 1567, 28, 816, "Input"],
+
+Cell[CellGroupData[{
+Cell[3346, 83, 260, 4, 91, "Input"],
+Cell[3609, 89, 38, 1, 41, "Output"]
+}, Open  ]],
+Cell[3662, 93, 1454, 27, 691, "Input"],
+
+Cell[CellGroupData[{
+Cell[5141, 124, 505, 9, 141, "Input"],
+Cell[5649, 135, 39, 1, 41, "Output"],
+Cell[5691, 138, 38, 1, 41, "Output"]
+}, Open  ]],
+Cell[5744, 142, 638, 11, 316, "Input"],
+Cell[6385, 155, 127, 2, 66, "Input"],
+
+Cell[CellGroupData[{
+Cell[6537, 161, 774, 13, 341, "Input"],
+Cell[7314, 176, 145, 3, 35, "Print"],
+Cell[7462, 181, 137, 3, 35, "Print"],
+Cell[7602, 186, 145, 3, 35, "Print"],
+Cell[7750, 191, 145, 3, 35, "Print"],
+Cell[7898, 196, 38, 1, 41, "Output"],
+Cell[7939, 199, 38, 1, 41, "Output"],
+Cell[7980, 202, 38, 1, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8055, 208, 774, 13, 341, "Input"],
+Cell[8832, 223, 145, 3, 35, "Print"],
+Cell[8980, 228, 131, 3, 35, "Print"],
+Cell[9114, 233, 145, 3, 35, "Print"],
+Cell[9262, 238, 145, 3, 35, "Print"],
+Cell[9410, 243, 38, 1, 41, "Output"],
+Cell[9451, 246, 38, 1, 41, "Output"],
+Cell[9492, 249, 38, 1, 41, "Output"]
+}, Open  ]],
+Cell[9545, 253, 1760, 31, 841, "Input"],
+Cell[11308, 286, 123, 2, 66, "Input"],
+
+Cell[CellGroupData[{
+Cell[11456, 292, 487, 8, 216, "Input"],
+Cell[11946, 302, 143, 3, 35, "Print"],
+Cell[12092, 307, 145, 3, 35, "Print"],
+Cell[12240, 312, 141, 3, 35, "Print"],
+Cell[12384, 317, 38, 1, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12459, 323, 487, 8, 216, "Input"],
+Cell[12949, 333, 143, 3, 35, "Print"],
+Cell[13095, 338, 145, 3, 35, "Print"],
+Cell[13243, 343, 139, 3, 35, "Print"],
+Cell[13385, 348, 38, 1, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13460, 354, 42, 1, 41, "Input"],
+Cell[13505, 357, 38, 1, 41, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
