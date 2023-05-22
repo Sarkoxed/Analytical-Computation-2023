@@ -7,7 +7,7 @@ title: title.pdf
 	mv title_o.pdf title.pdf
 
 merge: title pan
-	pdftk title.pdf lab3.pdf cat output merged.pdf
+	pdftk title.pdf Lab4.pdf cat output merged.pdf
 
 
 # very dirty
